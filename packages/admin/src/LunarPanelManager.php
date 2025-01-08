@@ -6,16 +6,12 @@ use App\Constants\AnnouncementPlacement;
 use App\Constants\TenancyPermissionConstants;
 use App\Filament\Dashboard\Pages\Team;
 use App\Filament\Dashboard\Pages\TenantSettings;
-use App\Filament\Dashboard\Resources\ChannelResource;
-use App\Filament\Dashboard\Resources\IntegrationResource;
 use App\Filament\Dashboard\Resources\InvitationResource;
-use App\Filament\Dashboard\Resources\SupplierResource;
 use App\Filament\Dashboard\Resources\OrderResource;
 use App\Filament\Dashboard\Resources\SubscriptionResource;
-use App\Filament\Dashboard\Resources\TenantIntegrationResource;
 use App\Filament\Dashboard\Resources\TransactionResource;
 use App\Models\Tenant;
-use App\Services\TenantPermissionService;
+use App\Services\TenantPermissionManager;
 use Filament\Facades\Filament;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -85,19 +81,15 @@ class LunarPanelManager
         Resources\ProductVariantResource::class,
         // Resources\StaffResource::class,
         Resources\TagResource::class,
-        // Resources\TaxClassResource::class,
-        // Resources\TaxZoneResource::class,
-        // Resources\TaxRateResource::class,
+        Resources\TaxClassResource::class,
+        Resources\TaxZoneResource::class,
+        Resources\TaxRateResource::class,
 
         //Custom
-        SupplierResource::class,
-        IntegrationResource::class,
-        TenantIntegrationResource::class,
         InvitationResource::class,
         OrderResource::class,
         SubscriptionResource::class,
-        TransactionResource::class,
-        ChannelResource::class,
+        TransactionResource::class
     ];
 
     protected static $pages = [
@@ -310,9 +302,9 @@ class LunarPanelManager
                     ->label('Workspace Settings')
                     ->visible(
                         function () {
-                            $tenantPermissionService = app(TenantPermissionService::class);
+                            $tenantPermissionManager = app(TenantPermissionManager::class);
 
-                            return $tenantPermissionService->tenantUserHasPermissionTo(
+                            return $tenantPermissionManager->tenantUserHasPermissionTo(
                                 Filament::getTenant(),
                                 auth()->user(),
                                 TenancyPermissionConstants::PERMISSION_UPDATE_TENANT_SETTINGS

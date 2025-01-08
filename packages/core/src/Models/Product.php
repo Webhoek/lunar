@@ -2,10 +2,7 @@
 
 namespace Lunar\Models;
 
-use App\Models\Fulfilment\PublishedProduct;
-use App\Models\Supplier;
 use App\Models\Trait\HasTenant;
-use App\Services\Fulfillment\ProductPublisher;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Collection;

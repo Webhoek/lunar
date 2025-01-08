@@ -229,6 +229,48 @@ class Staff extends Authenticatable implements FilamentUser, HasName,  MustVerif
         return $this->hasMany(Transaction::class, 'user_id');
     }
 
+
+    public function getPublicName()
+    {
+        return $this->public_name ?? $this->name;
+    }
+
+
+    public function roadmapItems(): HasMany
+    {
+        return $this->hasMany(RoadmapItem::class);
+    }
+
+    public function roadmapItemUpvotes(): BelongsToMany
+    {
+        return $this->belongsToMany(RoadmapItem::class, 'roadmap_item_user_upvotes');
+    }
+
+    public function userParameters(): HasMany
+    {
+        return $this->hasMany(UserParameter::class);
+    }
+
+    public function stripeData(): HasMany
+    {
+        return $this->hasMany(UserStripeData::class);
+    }
+
+    public function subscriptions(): HasMany
+    {
+        return $this->hasMany(Subscription::class, 'user_id');
+    }
+
+    public function orders(): HasMany
+    {
+        return $this->hasMany(Order::class, 'user_id');
+    }
+
+    public function transactions(): HasMany
+    {
+        return $this->hasMany(Transaction::class, 'user_id');
+    }
+
     public function canAccessPanel(Panel $panel): bool
     {
         if ($panel->getId() == 'admin' && ! $this->is_admin) {

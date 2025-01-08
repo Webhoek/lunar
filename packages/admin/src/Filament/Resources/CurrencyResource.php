@@ -15,7 +15,7 @@ use Lunar\Models\Contracts\Currency as CurrencyContract;
 
 class CurrencyResource extends BaseResource
 {
-    // protected static ?string $permission = 'tenancy:settings:core';
+    protected static ?string $permission = 'tenancy:settings:core';
 
     protected static ?string $model = CurrencyContract::class;
 

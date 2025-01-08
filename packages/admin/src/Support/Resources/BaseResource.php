@@ -3,7 +3,7 @@
 namespace Lunar\Admin\Support\Resources;
 
 use App\Constants\TenancyPermissionConstants;
-use App\Services\TenantPermissionService;
+use App\Services\TenantPermissionManager;
 use Filament\Facades\Filament;
 use Filament\Resources\Resource;
 use Illuminate\Database\Connection;
@@ -52,8 +52,8 @@ class BaseResource extends Resource
 
 //        return $user->can(static::$permission);
 
-        $tenantPermissionService = app(TenantPermissionService::class); // a bit ugly, but this is the Filament way :/
-        return config('app.allow_tenant_invitations', false) && $tenantPermissionService->tenantUserHasPermissionTo(
+        $tenantPermissionManager = app(TenantPermissionManager::class); // a bit ugly, but this is the Filament way :/
+        return config('app.allow_tenant_invitations', false) && $tenantPermissionManager->tenantUserHasPermissionTo(
                 Filament::getTenant(),
                 $user,
                 static::$permission
