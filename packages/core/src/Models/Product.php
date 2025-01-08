@@ -2,7 +2,6 @@
 
 namespace Lunar\Models;
 
-use App\Models\Supplier;
 use App\Models\Trait\HasTenant;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;

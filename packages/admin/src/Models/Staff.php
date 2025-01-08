@@ -42,7 +42,30 @@ class Staff extends Authenticatable implements FilamentUser, HasName,  MustVerif
     use HasRoles;
     use Notifiable;
     use SoftDeletes;
-    use TwoFactorAuthenticatable;
+
+    /**
+     * Return a new factory instance for the model.
+     */
+    protected static function newFactory()
+    {
+        return StaffFactory::new();
+    }
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'firstname',
+        'lastname',
+        'admin',
+        'email',
+        'password',
+        'is_admin',
+        'public_name',
+        'is_blocked',
+    ];
 
     protected $guard_name = 'staff';
 
@@ -126,6 +149,48 @@ class Staff extends Authenticatable implements FilamentUser, HasName,  MustVerif
     public function getFilamentName(): string
     {
         return $this->full_name;
+    }
+
+
+    public function roadmapItems(): HasMany
+    {
+        return $this->hasMany(RoadmapItem::class);
+    }
+
+    public function roadmapItemUpvotes(): BelongsToMany
+    {
+        return $this->belongsToMany(RoadmapItem::class, 'roadmap_item_user_upvotes');
+    }
+
+    public function userParameters(): HasMany
+    {
+        return $this->hasMany(UserParameter::class);
+    }
+
+    public function stripeData(): HasMany
+    {
+        return $this->hasMany(UserStripeData::class);
+    }
+
+    public function subscriptions(): HasMany
+    {
+        return $this->hasMany(Subscription::class, 'user_id');
+    }
+
+    public function orders(): HasMany
+    {
+        return $this->hasMany(Order::class, 'user_id');
+    }
+
+    public function transactions(): HasMany
+    {
+        return $this->hasMany(Transaction::class, 'user_id');
+    }
+
+
+    public function getPublicName()
+    {
+        return $this->public_name ?? $this->name;
     }
 
 
