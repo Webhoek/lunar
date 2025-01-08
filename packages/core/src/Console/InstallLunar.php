@@ -76,136 +76,10 @@ class InstallLunar extends Command
 
         DB::transaction(function () {
 
-            if (! Country::count()) {
-                $this->components->info('Importing countries');
-                $this->call('lunar:import:address-data');
+            if (class_exists(Staff::class) && ! Staff::whereAdmin(true)->exists()) {
+                $this->components->info('First create a lunar admin user');
+                $this->call('lunar:create-admin');
             }
-
-            if (! TaxClass::count()) {
-                $this->components->info('Adding a default tax class.');
-
-                TaxClass::create([
-                    'name' => 'Default Tax Class',
-                    'default' => true,
-                ]);
-            }
-
-
-            $this->components->info('Setting up initial attributes');
-
-            $group = AttributeGroup::create([
-                'attributable_type' => Product::morphName(),
-                'name' => collect([
-                    'en' => 'Details',
-                ]),
-                'handle' => 'details',
-                'position' => 1,
-            ]);
-
-            $collectionGroup = AttributeGroup::create([
-                'attributable_type' => Collection::morphName(),
-                'name' => collect([
-                    'en' => 'Details',
-                ]),
-                'handle' => 'collection_details',
-                'position' => 1,
-            ]);
-
-            Attribute::create([
-                'attribute_type' => 'product',
-                'attribute_group_id' => $group->id,
-                'position' => 1,
-                'name' => [
-                    'en' => 'Name',
-                ],
-                'handle' => 'name',
-                'section' => 'main',
-                'type' => TranslatedText::class,
-                'required' => true,
-                'default_value' => null,
-                'configuration' => [
-                    'richtext' => false,
-                ],
-                'system' => true,
-                'description' => [
-                    'en' => '',
-                ],
-            ]);
-
-            Attribute::create([
-                'attribute_type' => 'collection',
-                'attribute_group_id' => $collectionGroup->id,
-                'position' => 1,
-                'name' => [
-                    'en' => 'Name',
-                ],
-                'handle' => 'name',
-                'section' => 'main',
-                'type' => TranslatedText::class,
-                'required' => true,
-                'default_value' => null,
-                'configuration' => [
-                    'richtext' => false,
-                ],
-                'system' => true,
-                'description' => [
-                    'en' => '',
-                ],
-            ]);
-
-            Attribute::create([
-                'attribute_type' => 'product',
-                'attribute_group_id' => $group->id,
-                'position' => 2,
-                'name' => [
-                    'en' => 'Description',
-                ],
-                'handle' => 'description',
-                'section' => 'main',
-                'type' => TranslatedText::class,
-                'required' => false,
-                'default_value' => null,
-                'configuration' => [
-                    'richtext' => true,
-                ],
-                'system' => false,
-                'description' => [
-                    'en' => '',
-                ],
-            ]);
-
-            Attribute::create([
-                'attribute_type' => 'collection',
-                'attribute_group_id' => $collectionGroup->id,
-                'position' => 2,
-                'name' => [
-                    'en' => 'Description',
-                ],
-                'handle' => 'description',
-                'section' => 'main',
-                'type' => TranslatedText::class,
-                'required' => false,
-                'default_value' => null,
-                'configuration' => [
-                    'richtext' => true,
-                ],
-                'system' => false,
-                'description' => [
-                    'en' => '',
-                ],
-            ]);
-
-            $this->components->info('Adding a product type.');
-
-            $type = ProductType::create([
-                'name' => 'Stock',
-            ]);
-
-            $type->mappedAttributes()->attach(
-                Attribute::whereAttributeType(
-                    Product::morphName()
-                )->get()->pluck('id')
-            );
         });
 
         DB::transaction(function () {
@@ -213,10 +87,15 @@ class InstallLunar extends Command
             $tenants = Tenant::all();
 
             $tenants->each(function($tenant){
-                $this->components->info('Start Importing tenant '. $tenant->name);
+                $this->components->info('Start Importing tenant'. $tenant->name);
                 Filament::setTenant($tenant, true);
 
-                if (! Channel::withGlobalScope(TenantScope::class, new TenantScope)->whereDefault(true)->exists()) {
+                if (! Country::count()) {
+                    $this->components->info('Importing countries');
+                    $this->call('lunar:import:address-data');
+                }
+
+                if (! Channel::whereDefault(true)->exists()) {
                     $this->components->info('Setting up default channel');
 
                     Channel::create([
@@ -260,35 +139,160 @@ class InstallLunar extends Command
                     ]);
                 }
 
-                if (! CollectionGroup::count()) {
-                    $this->components->info('Adding an initial collection group');
-
-                    CollectionGroup::create([
-                        'name' => 'Main',
-                        'handle' => 'main',
-                    ]);
-                }
-
-                if (! TaxClass::count()) {
-                    $this->components->info('Adding a default tax class.');
-
-                TaxClass::create([
-                    'name' => 'Default Tax Class',
-                    'default' => true,
-                ]);
-            }
+    
 
 
             $this->components->info('Setting up initial attributes');
 
+            if (! Attribute::count()) {
+                $this->components->info('Setting up initial attributes');
+
+                if (! TaxClass::count()) {
+                    $this->components->info('Adding a default tax class.');
+
+                    TaxClass::create([
+                        'name' => 'Default Tax Class',
+                        'default' => true,
+                    ]);
+                }
+
+                if (! Attribute::count()) {
+                    $this->components->info('Setting up initial attributes');
+
+                    $group = AttributeGroup::create([
+                        'attributable_type' => Product::morphName(),
+                        'name' => collect([
+                            'en' => 'Details',
+                        ]),
+                        'handle' => 'details',
+                        'position' => 1,
+                    ]);
+
+                    $collectionGroup = AttributeGroup::create([
+                        'attributable_type' => Collection::morphName(),
+                        'name' => collect([
+                            'en' => 'Details',
+                        ]),
+                        'handle' => 'collection_details',
+                        'position' => 1,
+                    ]);
+
+                    Attribute::create([
+                        'attribute_type' => 'product',
+                        'attribute_group_id' => $group->id,
+                        'position' => 1,
+                        'name' => [
+                            'en' => 'Name',
+                        ],
+                        'handle' => 'name',
+                        'section' => 'main',
+                        'type' => TranslatedText::class,
+                        'required' => true,
+                        'default_value' => null,
+                        'configuration' => [
+                            'richtext' => false,
+                        ],
+                        'system' => true,
+                        'description' => [
+                            'en' => '',
+                        ],
+                    ]);
+
+                    Attribute::create([
+                        'attribute_type' => 'collection',
+                        'attribute_group_id' => $collectionGroup->id,
+                        'position' => 1,
+                        'name' => [
+                            'en' => 'Name',
+                        ],
+                        'handle' => 'name',
+                        'section' => 'main',
+                        'type' => TranslatedText::class,
+                        'required' => true,
+                        'default_value' => null,
+                        'configuration' => [
+                            'richtext' => false,
+                        ],
+                        'system' => true,
+                        'description' => [
+                            'en' => '',
+                        ],
+                    ]);
+
+                    Attribute::create([
+                        'attribute_type' => 'product',
+                        'attribute_group_id' => $group->id,
+                        'position' => 2,
+                        'name' => [
+                            'en' => 'Description',
+                        ],
+                        'handle' => 'description',
+                        'section' => 'main',
+                        'type' => TranslatedText::class,
+                        'required' => false,
+                        'default_value' => null,
+                        'configuration' => [
+                            'richtext' => true,
+                        ],
+                        'system' => false,
+                        'description' => [
+                            'en' => '',
+                        ],
+                    ]);
+
+                    Attribute::create([
+                        'attribute_type' => 'collection',
+                        'attribute_group_id' => $collectionGroup->id,
+                        'position' => 2,
+                        'name' => [
+                            'en' => 'Description',
+                        ],
+                        'handle' => 'description',
+                        'section' => 'main',
+                        'type' => TranslatedText::class,
+                        'required' => false,
+                        'default_value' => null,
+                        'configuration' => [
+                            'richtext' => true,
+                        ],
+                        'system' => false,
+                        'description' => [
+                            'en' => '',
+                        ],
+                    ]);
+                }
+
+                if (! ProductType::count()) {
+                    $this->components->info('Adding a product type.');
+
+                    $type = ProductType::create([
+                        'name' => 'Stock',
+                    ]);
+
+                    $type->mappedAttributes()->attach(
+                        Attribute::whereAttributeType(
+                            Product::morphName()
+                        )->get()->pluck('id')
+                    );
+                }
+
             });
         });
 
-        // $this->components->info('Publishing Filament assets');
-        // $this->call('filament:assets');
+        $this->components->info('Publishing Filament assets');
+        $this->call('filament:assets');
 
         $this->components->info('Lunar is now installed 🚀');
-        
+
+        if (!$force && confirm('Would you like to show some love by giving us a star on GitHub?')) {
+            match (PHP_OS_FAMILY) {
+                'Darwin' => exec('open https://github.com/lunarphp/lunar'),
+                'Linux' => exec('xdg-open https://github.com/lunarphp/lunar'),
+                'Windows' => exec('start https://github.com/lunarphp/lunar'),
+            };
+
+            $this->components->info('Thank you!');
+        }
     }
 
     /**

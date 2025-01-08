@@ -2,6 +2,7 @@
 
 namespace Lunar\Models;
 
+
 use App\Models\Supplier;
 use App\Models\Trait\HasTenant;
 use Illuminate\Database\Eloquent\Builder;
@@ -55,6 +56,7 @@ class Product extends BaseModel implements Contracts\Product, SpatieHasMedia
     use LogsActivity;
     use Searchable;
     use SoftDeletes;
+
 
 
     /**
