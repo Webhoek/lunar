@@ -13,7 +13,7 @@ use Lunar\Models\Contracts\Tag as TagContract;
 
 class TagResource extends BaseResource
 {
-    protected static ?string $permission = 'settings';
+    protected static ?string $permission = 'tenancy:settings';
 
     protected static ?string $model = TagContract::class;
 

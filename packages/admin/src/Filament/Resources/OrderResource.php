@@ -22,7 +22,7 @@ use Lunar\Models\Order;
 
 class OrderResource extends BaseResource
 {
-    protected static ?string $permission = 'sales:manage-orders';
+    protected static ?string $permission = 'tenancy:sales:manage-orders';
 
     protected static ?string $model = OrderContract::class;
 

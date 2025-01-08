@@ -2,6 +2,7 @@
 
 namespace Lunar\Models;
 
+use App\Models\Trait\HasTenant;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Lunar\Base\BaseModel;
@@ -22,6 +23,7 @@ use Lunar\Database\Factories\CustomerGroupFactory;
  */
 class CustomerGroup extends BaseModel implements Contracts\CustomerGroup
 {
+    use HasTenant;
     use HasAttributes;
     use HasDefaultRecord;
     use HasFactory;

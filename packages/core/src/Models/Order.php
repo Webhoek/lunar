@@ -2,6 +2,7 @@
 
 namespace Lunar\Models;
 
+use App\Models\Trait\HasTenant;
 use Illuminate\Database\Eloquent\Casts\AsArrayObject;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -45,6 +46,7 @@ use Lunar\Database\Factories\OrderFactory;
  */
 class Order extends BaseModel implements Contracts\Order
 {
+    use HasTenant;
     use HasFactory,
         HasMacros,
         HasTags,
