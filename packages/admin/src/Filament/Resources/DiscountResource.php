@@ -28,7 +28,7 @@ use Lunar\Models\Currency;
 
 class DiscountResource extends BaseResource
 {
-    protected static ?string $permission = 'sales:manage-discounts';
+    protected static ?string $permission = 'tenancy:sales:manage-discounts';
 
     protected static ?string $model = Discount::class;
 

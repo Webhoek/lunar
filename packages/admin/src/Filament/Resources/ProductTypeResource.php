@@ -15,7 +15,7 @@ use Lunar\Models\ProductVariant;
 
 class ProductTypeResource extends BaseResource
 {
-    protected static ?string $permission = 'catalog:manage-products';
+    protected static ?string $permission = 'tenancy:catalog:manage-products';
 
     protected static ?string $model = ProductType::class;
 

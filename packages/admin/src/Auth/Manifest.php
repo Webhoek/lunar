@@ -127,8 +127,10 @@ class Manifest
     public function getBaseRoles(): array
     {
         return [
-            'admin',
-            'staff',
+//            'admin',
+//            'staff',
+            'tenancy:admin',
+            'tenancy:user',
         ];
     }
 
@@ -138,15 +140,15 @@ class Manifest
     public function getBasePermissions(): array
     {
         return [
-            'settings',
-            'settings:core',
-            'settings:manage-staff',
-            'settings:manage-attributes',
-            'catalog:manage-products',
-            'catalog:manage-collections',
-            'sales:manage-orders',
-            'sales:manage-customers',
-            'sales:manage-discounts',
+            'tenancy:settings',
+            'tenancy:settings:core',
+            'tenancy:settings:manage-staff',
+            'tenancy:settings:manage-attributes',
+            'tenancy:catalog:manage-products',
+            'tenancy:catalog:manage-collections',
+            'tenancy:sales:manage-orders',
+            'tenancy:sales:manage-customers',
+            'tenancy:sales:manage-discounts',
         ];
     }
 
