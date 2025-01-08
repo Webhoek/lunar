@@ -2,6 +2,7 @@
 
 namespace Lunar\Models;
 
+use App\Models\Trait\HasTenant;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
@@ -25,6 +26,7 @@ use Lunar\Database\Factories\ChannelFactory;
  */
 class Channel extends BaseModel implements Contracts\Channel
 {
+    use HasTenant;
     use HasDefaultRecord;
     use HasFactory;
     use HasMacros;

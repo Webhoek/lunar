@@ -2,6 +2,7 @@
 
 namespace Lunar\Models;
 
+use App\Models\Trait\HasTenant;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Lunar\Base\BaseModel;
@@ -17,6 +18,7 @@ use Lunar\Database\Factories\CollectionGroupFactory;
  */
 class CollectionGroup extends BaseModel implements Contracts\CollectionGroup
 {
+    use HasTenant;
     use HasFactory;
     use HasMacros;
 

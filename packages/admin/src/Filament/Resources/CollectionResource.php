@@ -15,7 +15,7 @@ use Lunar\Models\Contracts\Collection;
 
 class CollectionResource extends BaseResource
 {
-    protected static ?string $permission = 'catalog:manage-collections';
+    protected static ?string $permission = 'tenancy:catalog:manage-collections';
 
     protected static ?string $model = Collection::class;
 

@@ -190,7 +190,7 @@ class LunarServiceProvider extends ServiceProvider
     public function boot(): void
     {
         if (! config('lunar.database.disable_migrations', false)) {
-            $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
+            //$this->loadMigrationsFrom(__DIR__.'/../database/migrations');
         }
 
         $this->registerObservers();
@@ -374,19 +374,13 @@ class LunarServiceProvider extends ServiceProvider
 
             if ($type == 'uuid') {
                 $this->foreignUuId($field_name)
-                    ->nullable($nullable)
-                    ->constrained(
-                        (new $userModel)->getTable()
-                    );
+                    ->nullable($nullable);
             } elseif ($type == 'int') {
                 $this->unsignedInteger($field_name)->nullable($nullable);
                 $this->foreign($field_name)->references('id')->on('users');
             } else {
                 $this->foreignId($field_name)
-                    ->nullable($nullable)
-                    ->constrained(
-                        (new $userModel)->getTable()
-                    );
+                    ->nullable($nullable);
             }
         });
     }

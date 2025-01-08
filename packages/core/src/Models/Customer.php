@@ -2,6 +2,7 @@
 
 namespace Lunar\Models;
 
+use App\Models\Trait\HasTenant;
 use Illuminate\Database\Eloquent\Casts\AsArrayObject;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -31,6 +32,7 @@ use Lunar\Database\Factories\CustomerFactory;
  */
 class Customer extends BaseModel implements Contracts\Customer
 {
+    use HasTenant;
     use HasAttributes;
     use HasFactory;
     use HasMacros;

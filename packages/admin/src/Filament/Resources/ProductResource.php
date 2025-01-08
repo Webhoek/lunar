@@ -39,7 +39,6 @@ use Lunar\Models\Tag;
 
 class ProductResource extends BaseResource
 {
-    protected static ?string $permission = 'catalog:manage-products';
 
     protected static ?string $model = Product::class;
 

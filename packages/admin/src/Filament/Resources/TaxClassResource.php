@@ -19,7 +19,7 @@ class TaxClassResource extends BaseResource
 {
     protected static ?string $cluster = Taxes::class;
 
-    protected static ?string $permission = 'settings:core';
+    protected static ?string $permission = 'tenancy:settings:core';
 
     protected static ?string $model = TaxClass::class;
 
