@@ -61,7 +61,9 @@ class LunarPanelProvider extends ServiceProvider
 
     public function boot(): void
     {
-        $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
+        if (! config('lunar.database.disable_migrations', false)) {
+            $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
+        }
 
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'lunarpanel');
 
@@ -153,26 +155,26 @@ class LunarPanelProvider extends ServiceProvider
         Event::listen(FilamentUpgraded::class, FilamentUpgradedListener::class);
     }
 
-    protected function registerStateListeners()
-    {
-        $states = [
-            EnsureBaseRolesAndPermissions::class,
-        ];
+        protected function registerStateListeners()
+        {
+            $states = [
+                EnsureBaseRolesAndPermissions::class,
+            ];
 
-        foreach ($states as $state) {
-            $class = new $state;
+            foreach ($states as $state) {
+                $class = new $state;
 
-            Event::listen(
-                [MigrationsStarted::class],
-                [$class, 'prepare']
-            );
+                Event::listen(
+                    [MigrationsStarted::class],
+                    [$class, 'prepare']
+                );
 
-            Event::listen(
-                [MigrationsEnded::class, NoPendingMigrations::class],
-                [$class, 'run']
-            );
+                Event::listen(
+                    [MigrationsEnded::class, NoPendingMigrations::class],
+                    [$class, 'run']
+                );
+            }
         }
-    }
 
     protected function registerLunarSynthesizer(): void
     {

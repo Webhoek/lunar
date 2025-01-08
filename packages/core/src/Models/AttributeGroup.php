@@ -2,6 +2,7 @@
 
 namespace Lunar\Models;
 
+use App\Models\Trait\HasTenant;
 use Illuminate\Database\Eloquent\Casts\AsCollection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -21,6 +22,7 @@ use Lunar\Database\Factories\AttributeGroupFactory;
  */
 class AttributeGroup extends BaseModel implements Contracts\AttributeGroup
 {
+    use HasTenant;
     use HasFactory;
     use HasMacros;
     use HasTranslations;

@@ -3,6 +3,7 @@
 namespace Lunar\Console\Commands\Import;
 
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 use Laravel\Prompts\Progress;
 use Lunar\Models\Country;
@@ -34,12 +35,18 @@ class AddressData extends Command
 
         $existing = Country::pluck('iso3');
 
+
+        // Define a cache key and a TTL (time to live) for the cache
+        $cacheKey = 'countries_and_states';
+        $cacheTTL = 60 * 60 * 24; // Cache for 1 day
         /**
          * Here we are using Http over Https due to some environments not having
          * the latest CA Authorities installed, causing an SSL exception to be thrown.
          */
-        $countries = Http::get('http://data.lunarphp.io/countries+states.json')
-            ->object();
+        $countries = Cache::remember($cacheKey, $cacheTTL, function () {
+            // Fetch the data if not cached
+            return Http::get('http://data.lunarphp.io/countries+states.json')->object();
+        });
 
         $newCountries = collect($countries)->filter(function ($country) use ($existing) {
             return ! $existing->contains($country->iso3);

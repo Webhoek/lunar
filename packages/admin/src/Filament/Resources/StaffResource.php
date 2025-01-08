@@ -18,7 +18,7 @@ use Lunar\Admin\Support\Resources\BaseResource;
 
 class StaffResource extends BaseResource
 {
-    protected static ?string $permission = 'settings:manage-staff';
+    protected static ?string $permission = 'tenancy:settings:manage-staff';
 
     protected static ?string $model = Staff::class;
 

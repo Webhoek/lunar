@@ -19,7 +19,7 @@ use Lunar\Models\Contracts\Channel;
 
 class ChannelResource extends BaseResource
 {
-    protected static ?string $permission = 'settings:core';
+    #protected static ?string $permission = 'tenancy:settings:core';
 
     protected static ?string $model = Channel::class;
 

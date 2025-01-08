@@ -11,6 +11,7 @@ use Lunar\Admin\Filament\Widgets\Dashboard\Orders\OrderStatsOverview;
 use Lunar\Admin\Filament\Widgets\Dashboard\Orders\OrderTotalsChart;
 use Lunar\Admin\Filament\Widgets\Dashboard\Orders\PopularProductsTable;
 use Lunar\Admin\Support\Pages\BaseDashboard;
+use RalphJSmit\Filament\Onboard\Widgets\OnboardTrackWidget;
 
 class Dashboard extends BaseDashboard
 {
@@ -19,6 +20,7 @@ class Dashboard extends BaseDashboard
     public function getWidgets(): array
     {
         return [
+            OnboardTrackWidget::class,
             OrderStatsOverview::class,
             OrderTotalsChart::class,
             OrdersSalesChart::class,
