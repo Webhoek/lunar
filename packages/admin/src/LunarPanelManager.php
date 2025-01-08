@@ -81,19 +81,9 @@ class LunarPanelManager
         Resources\ProductVariantResource::class,
         // Resources\StaffResource::class,
         Resources\TagResource::class,
-        // Resources\TaxClassResource::class,
-        // Resources\TaxZoneResource::class,
-        // Resources\TaxRateResource::class,
-
-        //Custom
-        SupplierResource::class,
-        IntegrationResource::class,
-        TenantIntegrationResource::class,
-        InvitationResource::class,
-        OrderResource::class,
-        SubscriptionResource::class,
-        TransactionResource::class,
-        ChannelResource::class,
+        Resources\TaxClassResource::class,
+        Resources\TaxZoneResource::class,
+        Resources\TaxRateResource::class,
     ];
 
     protected static $pages = [
