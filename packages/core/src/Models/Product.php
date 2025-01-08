@@ -2,6 +2,7 @@
 
 namespace Lunar\Models;
 
+use App\Models\Trait\HasTenant;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Collection;
@@ -41,6 +42,7 @@ use Spatie\MediaLibrary\HasMedia as SpatieHasMedia;
  */
 class Product extends BaseModel implements Contracts\Product, SpatieHasMedia
 {
+    use HasTenant;
     use HasChannels;
     use HasCustomerGroups;
     use HasFactory;
@@ -52,6 +54,7 @@ class Product extends BaseModel implements Contracts\Product, SpatieHasMedia
     use LogsActivity;
     use Searchable;
     use SoftDeletes;
+
 
     /**
      * Return a new factory instance for the model.

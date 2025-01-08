@@ -19,7 +19,7 @@ use Lunar\Models\Language;
 
 class AttributeGroupResource extends BaseResource
 {
-    protected static ?string $permission = 'settings:manage-attributes';
+    protected static ?string $permission = 'tenancy:settings:manage-attributes';
 
     protected static ?string $model = AttributeGroup::class;
 

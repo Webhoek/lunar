@@ -2,10 +2,21 @@
 
 namespace Lunar\Admin;
 
+use App\Constants\AnnouncementPlacement;
+use App\Constants\TenancyPermissionConstants;
+use App\Filament\Dashboard\Pages\Team;
+use App\Filament\Dashboard\Pages\TenantSettings;
+use App\Filament\Dashboard\Resources\InvitationResource;
+use App\Filament\Dashboard\Resources\OrderResource;
+use App\Filament\Dashboard\Resources\SubscriptionResource;
+use App\Filament\Dashboard\Resources\TransactionResource;
+use App\Models\Tenant;
+use App\Services\TenantPermissionManager;
 use Filament\Facades\Filament;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
+use Filament\Navigation\MenuItem;
 use Filament\Navigation\NavigationGroup;
 use Filament\Panel;
 use Filament\Support\Assets\Css;
@@ -13,14 +24,18 @@ use Filament\Support\Colors\Color;
 use Filament\Support\Facades\FilamentColor;
 use Filament\Support\Facades\FilamentIcon;
 use Filament\Tables\Table;
+use Filament\View\PanelsRenderHook;
+use Filament\Widgets\AccountWidget;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\Session\Middleware\StartSession;
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Route;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
+use Jeffgreco13\FilamentBreezy\BreezyCore;
 use Lunar\Admin\Filament\AvatarProviders\GravatarProvider;
 use Lunar\Admin\Filament\Pages;
 use Lunar\Admin\Filament\Resources;
@@ -33,6 +48,7 @@ use Lunar\Admin\Filament\Widgets\Dashboard\Orders\OrderTotalsChart;
 use Lunar\Admin\Filament\Widgets\Dashboard\Orders\PopularProductsTable;
 use Lunar\Admin\Http\Controllers\DownloadPdfController;
 use Lunar\Admin\Support\Facades\LunarAccessControl;
+use RalphJSmit\Filament\Onboard\Widgets\OnboardTrackWidget;
 
 class LunarPanelManager
 {
@@ -64,13 +80,23 @@ class LunarPanelManager
         Resources\TaxClassResource::class,
         Resources\TaxZoneResource::class,
         Resources\TaxRateResource::class,
+
+        //Custom
+        InvitationResource::class,
+        OrderResource::class,
+        SubscriptionResource::class,
+        TransactionResource::class
     ];
 
     protected static $pages = [
         Pages\Dashboard::class,
+        Team::class,
+        TenantSettings::class
     ];
 
     protected static $widgets = [
+        OnboardTrackWidget::class,
+        AccountWidget::class,
         OrderStatsOverview::class,
         OrderTotalsChart::class,
         OrdersSalesChart::class,
@@ -205,15 +231,17 @@ class LunarPanelManager
             ->spa()
             ->default()
             ->id($this->panelId)
-            ->brandName('Lunar')
+            ->brandName('lunar')
             ->brandLogo($brandAsset('lunar-logo.svg'))
             ->darkModeBrandLogo($brandAsset('lunar-logo-dark.svg'))
             ->favicon($brandAsset('lunar-icon.png'))
             ->brandLogoHeight('2rem')
-            ->path('lunar')
+            ->path('dashboard')
             ->authGuard('staff')
             ->defaultAvatarProvider(GravatarProvider::class)
             ->login()
+            ->tenantMenu()
+            ->tenant(Tenant::class, 'uuid')
             ->colors([
                 'primary' => Color::Sky,
             ])
@@ -235,12 +263,54 @@ class LunarPanelManager
             ->widgets(
                 static::getWidgets()
             )
+            ->userMenuItems([
+                MenuItem::make()
+                    ->label('Admin Panel')
+                    ->visible(
+                        fn () => auth()->user()->isAdmin()
+                    )
+                    ->url(fn () => route('filament.admin.pages.dashboard'))
+                    ->icon('heroicon-s-cog-8-tooth'),
+                MenuItem::make()
+                    ->label('Workspace Settings')
+                    ->visible(
+                        function () {
+                            $tenantPermissionManager = app(TenantPermissionManager::class);
+
+                            return $tenantPermissionManager->tenantUserHasPermissionTo(
+                                Filament::getTenant(),
+                                auth()->user(),
+                                TenancyPermissionConstants::PERMISSION_UPDATE_TENANT_SETTINGS
+                            );
+                        }
+                    )
+                    ->icon('heroicon-s-cog-8-tooth')
+                    ->url(fn () => TenantSettings::getUrl()),
+            ])
+            ->viteTheme('resources/css/filament/dashboard/theme.css')
+            ->discoverWidgets(in: app_path('Filament/Dashboard/Widgets'), for: 'App\\Filament\\Dashboard\\Widgets')
             ->authMiddleware([
                 Authenticate::class,
-            ])
-            ->plugins([
+            ])->plugins([
                 \Leandrocfe\FilamentApexCharts\FilamentApexChartsPlugin::make(),
+                BreezyCore::make()
+                    ->myProfile(
+                        shouldRegisterUserMenu: true, // Sets the 'account' link in the panel User Menu (default = true)
+                        shouldRegisterNavigation: false, // Adds a main navigation item for the My Profile page (default = false)
+                        hasAvatars: false, // Enables the avatar upload form component (default = false)
+                        slug: 'my-profile' // Sets the slug for the profile page (default = 'my-profile')
+                    )
+                    ->myProfileComponents([
+                        \App\Livewire\AddressForm::class,
+                    ]),
             ])
+
+            ->renderHook('panels::head.start', function () {
+                return view('components.layouts.partials.analytics');
+            })
+            ->renderHook(PanelsRenderHook::BODY_START,
+                fn (): string => Blade::render("@livewire('announcement.view', ['placement' => '".AnnouncementPlacement::USER_DASHBOARD->value."'])")
+            )
             ->discoverLivewireComponents(__DIR__.'/Livewire', 'Lunar\\Admin\\Livewire')
             ->livewireComponents([
                 Resources\OrderResource\Pages\Components\OrderItemsTable::class,
@@ -249,6 +319,10 @@ class LunarPanelManager
             ->navigationGroups([
                 'Catalog',
                 'Sales',
+                NavigationGroup::make()
+                    ->label('Team')
+                    ->icon('heroicon-s-users')
+                    ->collapsed(),
                 NavigationGroup::make()
                     ->label('Settings')
                     ->collapsed(),

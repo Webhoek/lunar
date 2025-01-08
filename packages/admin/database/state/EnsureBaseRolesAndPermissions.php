@@ -32,11 +32,11 @@ class EnsureBaseRolesAndPermissions
 
         if (Schema::hasTable($tableNames['permissions'])) {
             // Rename any existing permissions
-            Permission::where('name', 'catalogue:manage-products')->update(['name' => 'catalog:manage-products']);
-            Permission::where('name', 'catalogue:manage-collections')->update(['name' => 'catalog:manage-collections']);
-            Permission::where('name', 'catalogue:manage-orders')->update(['name' => 'sales:manage-orders']);
-            Permission::where('name', 'catalogue:manage-customers')->update(['name' => 'sales:manage-customers']);
-            Permission::where('name', 'catalogue:manage-discounts')->update(['name' => 'sales:manage-discounts']);
+            Permission::where('name', 'tenancy:catalogue:manage-products')->update(['name' => 'tenancy:catalog:manage-products']);
+            Permission::where('name', 'tenancy:catalogue:manage-collections')->update(['name' => 'tenancy:catalog:manage-collections']);
+            Permission::where('name', 'tenancy:catalogue:manage-orders')->update(['name' => 'tenancy:sales:manage-orders']);
+            Permission::where('name', 'tenancy:catalogue:manage-customers')->update(['name' => 'tenancy:sales:manage-customers']);
+            Permission::where('name', 'tenancy:catalogue:manage-discounts')->update(['name' => 'tenancy:sales:manage-discounts']);
 
             foreach (LunarAccessControl::getBasePermissions() as $permission) {
                 Permission::firstOrCreate([

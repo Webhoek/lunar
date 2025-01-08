@@ -19,7 +19,7 @@ use Lunar\Models\Language;
 
 class ProductOptionResource extends BaseResource
 {
-    protected static ?string $permission = 'settings';
+    protected static ?string $permission = 'tenancy:settings';
 
     protected static ?string $model = ProductOption::class;
 

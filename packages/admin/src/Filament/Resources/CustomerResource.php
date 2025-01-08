@@ -20,7 +20,7 @@ use Lunar\Models\Contracts\Customer;
 
 class CustomerResource extends BaseResource
 {
-    protected static ?string $permission = 'sales:manage-customers';
+    protected static ?string $permission = 'tenancy:sales:manage-customers';
 
     protected static ?string $model = Customer::class;
 
