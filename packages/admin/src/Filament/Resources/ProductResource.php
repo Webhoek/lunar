@@ -129,7 +129,7 @@ class ProductResource extends BaseResource
     protected static function getMainFormComponents(): array
     {
         return [
-            static::getBrandFormComponent(),
+            // static::getBrandFormComponent(),
             static::getProductTypeFormComponent(),
             static::getTagsFormComponent(),
         ];
@@ -383,7 +383,7 @@ class ProductResource extends BaseResource
     {
         return parent::getGlobalSearchEloquentQuery()->with([
             'variants',
-            'brand',
+            // 'brand',
             'tags',
         ]);
     }
@@ -393,7 +393,7 @@ class ProductResource extends BaseResource
         return [
             __('lunarpanel::product.table.sku.label') => $record->variants->first()->getIdentifier(),
             __('lunarpanel::product.table.stock.label') => $record->variants->first()->stock,
-            __('lunarpanel::product.table.brand.label') => $record->brand?->name,
+            // __('lunarpanel::product.table.brand.label') => $record->brand?->name,
         ];
     }
 }

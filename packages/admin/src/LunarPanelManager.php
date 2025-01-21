@@ -7,6 +7,7 @@ use App\Constants\TenancyPermissionConstants;
 use App\Filament\Dashboard\Pages\Team;
 use App\Filament\Dashboard\Pages\TenantSettings;
 use App\Filament\Dashboard\Resources\InvitationResource;
+use App\Filament\Dashboard\Resources\MarketplaceResource;
 use App\Filament\Dashboard\Resources\OrderResource;
 use App\Filament\Dashboard\Resources\SubscriptionResource;
 use App\Filament\Dashboard\Resources\TransactionResource;
@@ -82,6 +83,7 @@ class LunarPanelManager
         Resources\TaxRateResource::class,
 
         //Custom
+        MarketplaceResource::class,
         InvitationResource::class,
         OrderResource::class,
         SubscriptionResource::class,
