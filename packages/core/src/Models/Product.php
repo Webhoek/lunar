@@ -50,7 +50,7 @@ class Product extends BaseModel implements Contracts\Product, SpatieHasMedia
     use HasMedia;
     use HasTags;
     use HasTranslations;
-    use HasUrls;
+    //use HasUrls;
     use LogsActivity;
     use Searchable;
     use SoftDeletes;
@@ -74,7 +74,7 @@ class Product extends BaseModel implements Contracts\Product, SpatieHasMedia
         'attribute_data',
         'product_type_id',
         'status',
-        'brand_id',
+        'supplier_id',
     ];
 
     /**
@@ -188,6 +188,11 @@ class Product extends BaseModel implements Contracts\Product, SpatieHasMedia
     public function brand(): BelongsTo
     {
         return $this->belongsTo(Brand::modelClass());
+    }
+
+    public function supplier(): BelongsTo
+    {
+        return $this->belongsTo(Supplier::modelClass());
     }
 
     public function scopeStatus(Builder $query, string $status): Builder
