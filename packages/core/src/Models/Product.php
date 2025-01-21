@@ -192,7 +192,7 @@ class Product extends BaseModel implements Contracts\Product, SpatieHasMedia
 
     public function supplier(): BelongsTo
     {
-        return $this->belongsTo(Supplier::class);
+        return $this->belongsTo(Supplier::modelClass());
     }
 
     public function scopeStatus(Builder $query, string $status): Builder
