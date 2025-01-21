@@ -2,7 +2,6 @@
 
 namespace Lunar\Models;
 
-
 use App\Models\Supplier;
 use App\Models\Trait\HasTenant;
 use Illuminate\Database\Eloquent\Builder;
@@ -77,6 +76,7 @@ class Product extends BaseModel implements Contracts\Product, SpatieHasMedia
         'attribute_data',
         'product_type_id',
         'status',
+        'is_template',
         'supplier_id',
     ];
 
@@ -188,7 +188,7 @@ class Product extends BaseModel implements Contracts\Product, SpatieHasMedia
 
     public function supplier(): BelongsTo
     {
-        return $this->belongsTo(Supplier::modelClass());
+        return $this->belongsTo(Supplier::class);
     }
 
     public function scopeStatus(Builder $query, string $status): Builder
