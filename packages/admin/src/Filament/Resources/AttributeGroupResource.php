@@ -25,6 +25,9 @@ class AttributeGroupResource extends BaseResource
 
     protected static ?int $navigationSort = 1;
 
+    protected static bool $isScopedToTenant = false;
+
+
     public static function getLabel(): string
     {
         return __('lunarpanel::attributegroup.label');
