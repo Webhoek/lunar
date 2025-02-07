@@ -76,11 +76,11 @@ class LunarPanelManager
         Resources\ProductResource::class,
         Resources\ProductTypeResource::class,
         Resources\ProductVariantResource::class,
-        Resources\StaffResource::class,
+        // Resources\StaffResource::class,
         Resources\TagResource::class,
-        Resources\TaxClassResource::class,
-        Resources\TaxZoneResource::class,
-        Resources\TaxRateResource::class,
+        // Resources\TaxClassResource::class,
+        // Resources\TaxZoneResource::class,
+        // Resources\TaxRateResource::class,
 
         //Custom
         MarketplaceResource::class,
