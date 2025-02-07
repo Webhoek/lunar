@@ -24,6 +24,7 @@ use Lunar\Models\ProductType;
 use Lunar\Models\TaxClass;
 use App\Scopes\TenantScope;
 use Lunar\Models\TaxZone;
+use App\Scopes\TenantScope;
 
 use function Laravel\Prompts\confirm;
 
@@ -75,9 +76,18 @@ class InstallLunar extends Command
 
         DB::transaction(function () {
 
-            if (class_exists(Staff::class) && ! Staff::whereAdmin(true)->exists()) {
-                $this->components->info('First create a lunar admin user');
-                $this->call('lunar:create-admin');
+            if (! Country::count()) {
+                $this->components->info('Importing countries');
+                $this->call('lunar:import:address-data');
+            }
+
+            if (! TaxClass::count()) {
+                $this->components->info('Adding a default tax class.');
+
+                TaxClass::create([
+                    'name' => 'Default Tax Class',
+                    'default' => true,
+                ]);
             }
         });
 
@@ -86,15 +96,10 @@ class InstallLunar extends Command
             $tenants = Tenant::all();
 
             $tenants->each(function($tenant){
-                $this->components->info('Start Importing tenant'. $tenant->name);
+                $this->components->info('Start Importing tenant '. $tenant->name);
                 Filament::setTenant($tenant, true);
 
-                if (! Country::count()) {
-                    $this->components->info('Importing countries');
-                    $this->call('lunar:import:address-data');
-                }
-
-                if (! Channel::whereDefault(true)->exists()) {
+                if (! Channel::withGlobalScope(TenantScope::class, new TenantScope)->whereDefault(true)->exists()) {
                     $this->components->info('Setting up default channel');
 
                     Channel::create([
@@ -160,14 +165,6 @@ class InstallLunar extends Command
             if (! Attribute::count()) {
                 $this->components->info('Setting up initial attributes');
 
-                if (! TaxClass::count()) {
-                    $this->components->info('Adding a default tax class.');
-
-                    TaxClass::create([
-                        'name' => 'Default Tax Class',
-                        'default' => true,
-                    ]);
-                }
 
                 if (! Attribute::count()) {
                     $this->components->info('Setting up initial attributes');
@@ -292,20 +289,11 @@ class InstallLunar extends Command
             });
         });
 
-        $this->components->info('Publishing Filament assets');
-        $this->call('filament:assets');
+        // $this->components->info('Publishing Filament assets');
+        // $this->call('filament:assets');
 
         $this->components->info('Lunar is now installed 🚀');
-
-        if (!$force && confirm('Would you like to show some love by giving us a star on GitHub?')) {
-            match (PHP_OS_FAMILY) {
-                'Darwin' => exec('open https://github.com/lunarphp/lunar'),
-                'Linux' => exec('xdg-open https://github.com/lunarphp/lunar'),
-                'Windows' => exec('start https://github.com/lunarphp/lunar'),
-            };
-
-            $this->components->info('Thank you!');
-        }
+        
     }
 
     /**
