@@ -61,6 +61,7 @@ class Attributes extends Forms\Components\Group
 
                 $morphMap = $modelClass::morphName();
 
+                
                 $attributeQuery = Attribute::where('attribute_type', $morphMap);
 
                 // Products are unique in that they use product types to map attributes, so we need
@@ -72,6 +73,7 @@ class Attributes extends Forms\Components\Group
                     if ($productTypeId) {
                         $attributeQuery = ProductType::find($productTypeId)->productAttributes();
                     }
+
                 }
 
                 if ($morphMap == ProductVariant::morphName()) {

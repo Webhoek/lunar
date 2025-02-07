@@ -2,6 +2,7 @@
 
 namespace Lunar\Models;
 
+use App\Models\Trait\HasTenant;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -24,6 +25,7 @@ use Lunar\Database\Factories\CurrencyFactory;
  */
 class Currency extends BaseModel implements Contracts\Currency
 {
+    use HasTenant;
     use HasDefaultRecord;
     use HasFactory;
     use HasMacros;
