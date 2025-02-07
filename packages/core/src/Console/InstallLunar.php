@@ -22,6 +22,7 @@ use Lunar\Models\Language;
 use Lunar\Models\Product;
 use Lunar\Models\ProductType;
 use Lunar\Models\TaxClass;
+use App\Scopes\TenantScope;
 use Lunar\Models\TaxZone;
 use App\Scopes\TenantScope;
 
@@ -75,9 +76,18 @@ class InstallLunar extends Command
 
         DB::transaction(function () {
 
-            if (class_exists(Staff::class) && ! Staff::whereAdmin(true)->exists()) {
-                $this->components->info('First create a lunar admin user');
-                $this->call('lunar:create-admin');
+            if (! Country::count()) {
+                $this->components->info('Importing countries');
+                $this->call('lunar:import:address-data');
+            }
+
+            if (! TaxClass::count()) {
+                $this->components->info('Adding a default tax class.');
+
+                TaxClass::create([
+                    'name' => 'Default Tax Class',
+                    'default' => true,
+                ]);
             }
         });
 
@@ -86,15 +96,10 @@ class InstallLunar extends Command
             $tenants = Tenant::all();
 
             $tenants->each(function($tenant){
-                $this->components->info('Start Importing tenant'. $tenant->name);
+                $this->components->info('Start Importing tenant '. $tenant->name);
                 Filament::setTenant($tenant, true);
 
-                if (! Country::count()) {
-                    $this->components->info('Importing countries');
-                    $this->call('lunar:import:address-data');
-                }
-
-                if (! Channel::whereDefault(true)->exists()) {
+                if (! Channel::withGlobalScope(TenantScope::class, new TenantScope)->whereDefault(true)->exists()) {
                     $this->components->info('Setting up default channel');
 
                     Channel::create([
@@ -282,85 +287,11 @@ class InstallLunar extends Command
             });
         });
 
-        DB::transaction(function () {
-
-            $tenants = Tenant::all();
-
-            $tenants->each(function($tenant){
-                $this->components->info('Start Importing tenant '. $tenant->name);
-                Filament::setTenant($tenant, true);
-
-                if (! Channel::withGlobalScope(TenantScope::class, new TenantScope)->whereDefault(true)->exists()) {
-                    $this->components->info('Setting up default channel');
-
-                    Channel::create([
-                        'name' => 'Webstore',
-                        'handle' => 'webstore',
-                        'default' => true,
-                        'url' => 'http://localhost',
-                    ]);
-                }
-
-                if (! Language::count()) {
-                    $this->components->info('Adding default language');
-
-                    Language::create([
-                        'code' => 'en',
-                        'name' => 'English',
-                        'default' => true,
-                    ]);
-                }
-
-                if (! Currency::whereDefault(true)->exists()) {
-                    $this->components->info('Adding a default currency (USD)');
-
-                    Currency::create([
-                        'code' => 'USD',
-                        'name' => 'US Dollar',
-                        'exchange_rate' => 1,
-                        'decimal_places' => 2,
-                        'default' => true,
-                        'enabled' => true,
-                    ]);
-                }
-
-                if (! CustomerGroup::whereDefault(true)->exists()) {
-                    $this->components->info('Adding a default customer group.');
-
-                    CustomerGroup::create([
-                        'name' => 'Retail',
-                        'handle' => 'retail',
-                        'default' => true,
-                    ]);
-                }
-
-                if (! CollectionGroup::count()) {
-                    $this->components->info('Adding an initial collection group');
-
-                    CollectionGroup::create([
-                        'name' => 'Main',
-                        'handle' => 'main',
-                    ]);
-                }
-
-
-            });
-        });
-
         // $this->components->info('Publishing Filament assets');
         // $this->call('filament:assets');
 
         $this->components->info('Lunar is now installed 🚀');
-
-        if (!$force && confirm('Would you like to show some love by giving us a star on GitHub?')) {
-            match (PHP_OS_FAMILY) {
-                'Darwin' => exec('open https://github.com/lunarphp/lunar'),
-                'Linux' => exec('xdg-open https://github.com/lunarphp/lunar'),
-                'Windows' => exec('start https://github.com/lunarphp/lunar'),
-            };
-
-            $this->components->info('Thank you!');
-        }
+        
     }
 
     /**
