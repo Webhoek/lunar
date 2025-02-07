@@ -2,6 +2,7 @@
 
 namespace Lunar\Models;
 
+use App\Models\Trait\HasTenant;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Lunar\Base\BaseModel;
@@ -19,6 +20,7 @@ use Lunar\Database\Factories\LanguageFactory;
  */
 class Language extends BaseModel implements Contracts\Language
 {
+    use HasTenant;
     use HasDefaultRecord;
     use HasFactory;
     use HasMacros;
