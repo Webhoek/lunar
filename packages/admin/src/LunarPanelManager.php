@@ -85,6 +85,7 @@ class LunarPanelManager
         // Resources\ProductTypeResource::class,
         Resources\ProductVariantResource::class,
         // Resources\StaffResource::class,
+        // Resources\StaffResource::class,
         Resources\TagResource::class,
         Resources\TaxClassResource::class,
         Resources\TaxZoneResource::class,
