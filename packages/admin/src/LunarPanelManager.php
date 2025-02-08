@@ -6,6 +6,7 @@ use App\Constants\AnnouncementPlacement;
 use App\Constants\TenancyPermissionConstants;
 use App\Filament\Dashboard\Pages\Team;
 use App\Filament\Dashboard\Pages\TenantSettings;
+use App\Filament\Dashboard\Resources\ChannelResource;
 use App\Filament\Dashboard\Resources\InvitationResource;
 use App\Filament\Dashboard\Resources\MarketplaceResource;
 use App\Filament\Dashboard\Resources\OrderResource;
@@ -66,8 +67,9 @@ class LunarPanelManager
     protected static $resources = [
         Resources\ActivityResource::class,
         Resources\AttributeGroupResource::class,
-        // Resources\BrandResource::class,
+        Resources\BrandResource::class,
         // Resources\ChannelResource::class,
+        ChannelResource::class,
         Resources\CollectionGroupResource::class,
         Resources\CollectionResource::class,
         Resources\CurrencyResource::class,

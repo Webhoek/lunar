@@ -39,7 +39,6 @@ class Channel extends BaseModel implements Contracts\Channel
     public $casts = [
         'enabled' => 'boolean',
         'settings' => 'array',
-        'default' => 'boolean',
     ];
 
     /**
