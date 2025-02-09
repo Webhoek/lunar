@@ -3,6 +3,7 @@
 namespace Lunar\Models;
 
 use App\Models\Trait\HasTenant;
+use App\Models\Integration;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
@@ -39,6 +40,7 @@ class Channel extends BaseModel implements Contracts\Channel
     public $casts = [
         'enabled' => 'boolean',
         'settings' => 'array',
+        'default' => 'boolean',
     ];
 
     /**
@@ -78,7 +80,7 @@ class Channel extends BaseModel implements Contracts\Channel
      */
     public function getHandler()
     {
-        return $this->integration?->getHandler($this);
+        return $this->integration?->getHandler();
     }
 
     public function channelable(): MorphTo
