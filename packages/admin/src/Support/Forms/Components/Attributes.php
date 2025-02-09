@@ -15,37 +15,15 @@ use Lunar\Models\ProductVariant;
 
 class Attributes extends Forms\Components\Group
 {
-    public ?string $modelClassOverride = null;
 
-    protected string|Closure $attributeDataField = 'attribute_data';
-
-    public function attributeDataField(string|Closure $attributeDataField): static
+    protected ?string $attributableType = null;
+    public function withType($type)
     {
-        $this->attributeDataField = $attributeDataField;
-
-        if (blank($this->relationship)) {
-            $this->statePath($attributeDataField);
-        }
+        $this->attributableType = $type;
 
         return $this;
     }
 
-    public function getAttributeDataField(): string
-    {
-        return $this->evaluate($this->attributeDataField);
-    }
-
-    public function using(string $modelClass): self
-    {
-        $this->modelClassOverride = $modelClass;
-
-        return $this;
-    }
-
-    public function getKey(): ?string
-    {
-        return 'attributeData'.$this->modelClassOverride;
-    }
 
     protected function setUp(): void
     {
@@ -55,7 +33,7 @@ class Attributes extends Forms\Components\Group
 
         if (blank($this->childComponents)) {
             $this->schema(function (\Filament\Forms\Get $get, Livewire $livewire, ?Model $record) {
-                $modelClass = $this->modelClassOverride ?: $livewire::getResource()::getModel();
+                $modelClass = $this->attributableType ?? $livewire::getResource()::getModel();
 
                 $productTypeId = null;
 
