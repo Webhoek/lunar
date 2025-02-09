@@ -7,6 +7,7 @@ use Lunar\Admin\Support\Forms\Components\TranslatedText as TranslatedTextCompone
 use Lunar\Admin\Support\Synthesizers\TranslatedTextSynth;
 use Lunar\Models\Attribute;
 
+
 class TranslatedText extends BaseFieldType
 {
     protected static string $synthesizer = TranslatedTextSynth::class;

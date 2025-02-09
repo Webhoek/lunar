@@ -65,7 +65,7 @@ class LunarPanelManager
     protected static $resources = [
         Resources\ActivityResource::class,
         Resources\AttributeGroupResource::class,
-        Resources\BrandResource::class,
+        // Resources\BrandResource::class,
         // Resources\ChannelResource::class,
         Resources\CollectionGroupResource::class,
         Resources\CollectionResource::class,
@@ -77,7 +77,7 @@ class LunarPanelManager
         Resources\OrderResource::class,
         Resources\ProductOptionResource::class,
         Resources\ProductResource::class,
-        Resources\ProductTypeResource::class,
+        // Resources\ProductTypeResource::class,
         Resources\ProductVariantResource::class,
         // Resources\StaffResource::class,
         Resources\TagResource::class,

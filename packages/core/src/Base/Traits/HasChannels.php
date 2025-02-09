@@ -16,7 +16,7 @@ trait HasChannels
     {
         static::created(function (Model $model) {
             // Add our initial channels, set to not be enabled or scheduled.
-            $channels = Channel::get()->mapWithKeys(function ($channel) {
+            $channels = app(Channel::class)->tenant()->get()->mapWithKeys(function ($channel) {
                 return [
                     $channel->id => [
                         'enabled' => $channel->default,
