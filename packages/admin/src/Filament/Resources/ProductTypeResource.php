@@ -15,7 +15,7 @@ use Lunar\Models\ProductVariant;
 
 class ProductTypeResource extends BaseResource
 {
-    protected static ?string $permission = 'tenancy:catalog:manage-products';
+    // protected static ?string $permission = 'tenancy:catalog:manage-products';
 
     protected static ?string $model = ProductType::class;
 
@@ -53,7 +53,7 @@ class ProductTypeResource extends BaseResource
                 Forms\Components\Tabs::make('Attributes')->tabs([
                     Forms\Components\Tabs\Tab::make(__('lunarpanel::producttype.tabs.product_attributes.label'))
                         ->schema([
-                            AttributeSelector::make('mappedAttributes')
+                            AttributeSelector::make(name: 'mappedAttributes')
                                 ->withType(Product::morphName())
                                 ->relationship(name: 'mappedAttributes')
                                 ->label('')

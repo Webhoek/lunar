@@ -3,9 +3,11 @@
 namespace Lunar\Models;
 
 use App\Models\Trait\HasTenant;
+use App\Models\Integration;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
 use Lunar\Base\BaseModel;
@@ -20,6 +22,8 @@ use Lunar\Database\Factories\ChannelFactory;
  * @property string $handle
  * @property bool $default
  * @property ?string $url
+ * @property ?int $integration_id
+ * @property array $settings
  * @property ?\Illuminate\Support\Carbon $created_at
  * @property ?\Illuminate\Support\Carbon $updated_at
  * @property ?\Illuminate\Support\Carbon $deleted_at
@@ -36,6 +40,7 @@ class Channel extends BaseModel implements Contracts\Channel
     public $casts = [
         'enabled' => 'boolean',
         'settings' => 'array',
+        'default' => 'boolean',
     ];
 
     /**
@@ -60,6 +65,22 @@ class Channel extends BaseModel implements Contracts\Channel
     public function setHandleAttribute(?string $val): void
     {
         $this->attributes['handle'] = Str::slug($val);
+    }
+
+    /**
+     * Get the integration associated with the channel.
+     */
+    public function integration(): BelongsTo
+    {
+        return $this->belongsTo(Integration::class);
+    }
+
+    /**
+     * Get the handler instance for this channel's integration.
+     */
+    public function getHandler()
+    {
+        return $this->integration?->getHandler();
     }
 
     public function channelable(): MorphTo

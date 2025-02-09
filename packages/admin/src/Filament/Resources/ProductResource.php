@@ -41,7 +41,7 @@ class ProductResource extends BaseResource
 {
 
     protected static ?string $model = Product::class;
-
+    protected static bool $isScopedToTenant = false;
     protected static ?string $recordTitleAttribute = 'recordTitle';
 
     protected static ?int $navigationSort = 1;
@@ -81,7 +81,7 @@ class ProductResource extends BaseResource
             Pages\ManageProductInventory::class,
             Pages\ManageProductShipping::class,
             Pages\ManageProductVariants::class,
-            Pages\ManageProductUrls::class,
+            //Pages\ManageProductUrls::class,
             Pages\ManageProductCollections::class,
             Pages\ManageProductAssociations::class,
         ];
@@ -345,6 +345,7 @@ class ProductResource extends BaseResource
         return [
             'index' => Pages\ListProducts::route('/'),
             'edit' => Pages\EditProduct::route('/{record}/edit'),
+            'view' => Pages\ViewProduct::route('/{record}'),
             'availability' => Pages\ManageProductAvailability::route('/{record}/availability'),
             'identifiers' => Pages\ManageProductIdentifiers::route('/{record}/identifiers'),
             'media' => Pages\ManageProductMedia::route('/{record}/media'),

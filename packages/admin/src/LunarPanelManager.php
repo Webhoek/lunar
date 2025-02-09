@@ -7,10 +7,12 @@ use App\Constants\TenancyPermissionConstants;
 use App\Filament\Dashboard\Pages\Team;
 use App\Filament\Dashboard\Pages\TenantSettings;
 use App\Filament\Dashboard\Resources\ChannelResource;
+use App\Filament\Dashboard\Resources\IntegrationResource;
 use App\Filament\Dashboard\Resources\InvitationResource;
-use App\Filament\Dashboard\Resources\MarketplaceResource;
+use App\Filament\Dashboard\Resources\SupplierResource;
 use App\Filament\Dashboard\Resources\OrderResource;
 use App\Filament\Dashboard\Resources\SubscriptionResource;
+use App\Filament\Dashboard\Resources\TenantIntegrationResource;
 use App\Filament\Dashboard\Resources\TransactionResource;
 use App\Models\Tenant;
 use App\Services\TenantPermissionManager;
@@ -65,7 +67,6 @@ class LunarPanelManager
         Resources\AttributeGroupResource::class,
         Resources\BrandResource::class,
         // Resources\ChannelResource::class,
-        ChannelResource::class,
         Resources\CollectionGroupResource::class,
         Resources\CollectionResource::class,
         Resources\CurrencyResource::class,
@@ -85,11 +86,14 @@ class LunarPanelManager
         // Resources\TaxRateResource::class,
 
         //Custom
-        MarketplaceResource::class,
+        SupplierResource::class,
+        IntegrationResource::class,
+        TenantIntegrationResource::class,
         InvitationResource::class,
         OrderResource::class,
         SubscriptionResource::class,
-        TransactionResource::class
+        TransactionResource::class,
+        ChannelResource::class,
     ];
 
     protected static $pages = [
