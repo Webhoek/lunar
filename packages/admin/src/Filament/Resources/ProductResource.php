@@ -207,6 +207,7 @@ class ProductResource extends BaseResource
         return Forms\Components\Select::make('product_type_id')
             ->label(__('lunarpanel::product.form.producttype.label'))
             ->relationship('productType', 'name')
+            ->visible(fn (Model $record) => !$record->is_template && !$record->source_product_id)
             ->searchable()
             ->preload()
             ->live()
