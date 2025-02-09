@@ -2,7 +2,8 @@
 
 namespace Lunar\Admin\Support\RelationManagers;
 
-use Filament;
+use Filament\Facades\Filament;
+use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -29,19 +30,19 @@ class ChannelRelationManager extends BaseRelationManager
     protected static function getFormInputs(): array
     {
         return [
-            Filament\Forms\Components\Toggle::make('enabled')->label(
+            Forms\Components\Toggle::make('enabled')->label(
                 __('lunarpanel::relationmanagers.channels.form.enabled.label')
             )->hint(fn (bool $state): string => match ($state) {
                 false => __('lunarpanel::relationmanagers.channels.form.enabled.helper_text_false'),
                 true => '',
             })->hintColor('danger')->live()->columnSpan(2),
-            Filament\Forms\Components\Grid::make(2)->schema([
-                Filament\Forms\Components\DateTimePicker::make('starts_at')->label(
+            Forms\Components\Grid::make(2)->schema([
+                Forms\Components\DateTimePicker::make('starts_at')->label(
                     __('lunarpanel::relationmanagers.channels.form.starts_at.label')
                 )->helperText(
                     __('lunarpanel::relationmanagers.channels.form.starts_at.helper_text')
                 ),
-                Filament\Forms\Components\DateTimePicker::make('ends_at')->label(
+                Forms\Components\DateTimePicker::make('ends_at')->label(
                     __('lunarpanel::relationmanagers.channels.form.ends_at.label')
                 )->helperText(
                     __('lunarpanel::relationmanagers.channels.form.ends_at.helper_text')
@@ -58,7 +59,12 @@ class ChannelRelationManager extends BaseRelationManager
             )->paginated(false)
             ->headerActions([
                 Tables\Actions\AttachAction::make()->form(fn (Tables\Actions\AttachAction $action): array => [
-                    $action->getRecordSelect(),
+                    $action->recordSelectOptionsQuery(function ($query) {
+                        if (Filament::getTenant()) {
+                            return $query->where('tenant_id', Filament::getTenant()->id);
+                        }
+                        return $query; // No filter if no tenant is set
+                    })->getRecordSelect(),
                     ...static::getFormInputs(),
                 ])->recordTitle(function ($record) {
                     return $record->name;
