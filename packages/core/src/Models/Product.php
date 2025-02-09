@@ -97,9 +97,9 @@ class Product extends BaseModel implements Contracts\Product, SpatieHasMedia
         );
     }
 
-    public function mappedAttributes(): Collection
+    public function mappedAttributes(): \Illuminate\Database\Eloquent\Relations\MorphToMany
     {
-        return $this->productType->mappedAttributes;
+        return $this->productType->mappedAttributes();
     }
 
     public function productType(): BelongsTo

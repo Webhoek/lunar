@@ -15,9 +15,18 @@ class AttributeSelector extends CheckboxList
 
     protected ?string $attributableType = null;
 
+    protected ?AttributeGroup $attributeGroup = null;
+
     public function withType($type)
     {
         $this->attributableType = $type;
+
+        return $this;
+    }
+
+    public function attributeGroup(?AttributeGroup $group)
+    {
+        $this->attributeGroup = $group;
 
         return $this;
     }
@@ -26,11 +35,17 @@ class AttributeSelector extends CheckboxList
     {
         parent::setUp();
 
-        $this->loadStateFromRelationships();
+        if (!$this->attributeGroup) {
+            $this->loadStateFromRelationships();
+        }
     }
 
     public function relationship(string|\Closure|null $name = null, string|\Closure|null $titleAttribute = null, ?\Closure $modifyQueryUsing = null): static
     {
+        if ($this->attributeGroup) {
+            return $this;
+        }
+
         parent::relationship($name, $titleAttribute, $modifyQueryUsing);
 
         $type = $this->attributableType;
@@ -53,9 +68,13 @@ class AttributeSelector extends CheckboxList
 
     public function getAttributeGroups()
     {
-        $type = get_class(
+        if ($this->attributeGroup) {
+            return collect([$this->attributeGroup]);
+        }
+
+        $type = $this->getRelationship() ? get_class(
             $this->getRelationship()->getParent()
-        );
+        ) : $this->attributableType;
 
         if ($type === ProductType::morphName()) {
             $type = Product::morphName();
@@ -70,11 +89,28 @@ class AttributeSelector extends CheckboxList
 
     public function getSelectedAttributes($groupId)
     {
-        return Attribute::where('attribute_group_id', $groupId)->whereIn('id', $this->getState())->get();
+        if ($this->attributeGroup) {
+            return Attribute::where('attribute_group_id', $groupId)
+                ->whereIn('id', $this->getState() ?? [])
+                ->get();
+        }
+
+        return Attribute::where('attribute_group_id', $groupId)
+            ->whereIn('id', $this->getState() ?? [])
+            ->get();
     }
 
     public function getAttributes($groupId)
     {
         return Attribute::where('attribute_group_id', $groupId)->get();
+    }
+
+    public function getState(): mixed
+    {
+        if ($this->attributeGroup) {
+            return parent::getState() ?? [];
+        }
+
+        return parent::getState();
     }
 }

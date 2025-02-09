@@ -14,6 +14,16 @@ use Lunar\Models\ProductVariant;
 
 class Attributes extends Forms\Components\Group
 {
+
+    protected ?string $attributableType = null;
+    public function withType($type)
+    {
+        $this->attributableType = $type;
+
+        return $this;
+    }
+
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -22,7 +32,7 @@ class Attributes extends Forms\Components\Group
 
         if (blank($this->childComponents)) {
             $this->schema(function (\Filament\Forms\Get $get, Livewire $livewire, ?Model $record) {
-                $modelClass = $livewire::getResource()::getModel();
+                $modelClass = $this->attributableType ?? $livewire::getResource()::getModel();
 
                 $productTypeId = null;
 
