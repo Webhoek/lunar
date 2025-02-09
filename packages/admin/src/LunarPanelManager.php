@@ -8,9 +8,9 @@ use App\Filament\Dashboard\Pages\Team;
 use App\Filament\Dashboard\Pages\TenantSettings;
 use App\Filament\Dashboard\Resources\IntegrationResource;
 use App\Filament\Dashboard\Resources\ChannelResource;
+use App\Filament\Dashboard\Resources\IntegrationResource;
 use App\Filament\Dashboard\Resources\InvitationResource;
 use App\Filament\Dashboard\Resources\SupplierResource;
-use App\Filament\Dashboard\Resources\MarketplaceResource;
 use App\Filament\Dashboard\Resources\OrderResource;
 use App\Filament\Dashboard\Resources\SubscriptionResource;
 use App\Filament\Dashboard\Resources\TenantIntegrationResource;
@@ -83,9 +83,19 @@ class LunarPanelManager
         // Resources\StaffResource::class,
         // Resources\StaffResource::class,
         Resources\TagResource::class,
-        Resources\TaxClassResource::class,
-        Resources\TaxZoneResource::class,
-        Resources\TaxRateResource::class,
+        // Resources\TaxClassResource::class,
+        // Resources\TaxZoneResource::class,
+        // Resources\TaxRateResource::class,
+
+        //Custom
+        SupplierResource::class,
+        IntegrationResource::class,
+        TenantIntegrationResource::class,
+        InvitationResource::class,
+        OrderResource::class,
+        SubscriptionResource::class,
+        TransactionResource::class,
+        ChannelResource::class,
     ];
 
     protected static $pages = [
