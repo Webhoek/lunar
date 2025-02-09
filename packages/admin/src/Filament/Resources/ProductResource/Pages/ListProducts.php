@@ -6,6 +6,7 @@ use Filament\Actions;
 use Filament\Forms\Components\Grid;
 use Filament\Resources\Components\Tab;
 use Filament\Support\Enums\MaxWidth;
+use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Lunar\Admin\Filament\Resources\ProductResource;
@@ -18,7 +19,13 @@ use Lunar\Models\TaxClass;
 
 class ListProducts extends BaseListRecords
 {
+
     protected static string $resource = ProductResource::class;
+
+    protected function getTableQuery(): ?Builder
+    {
+        return static::getResource()::getEloquentQuery()->where('tenant_id', filament()->getTenant()->id);
+    }
 
     protected function getDefaultHeaderActions(): array
     {

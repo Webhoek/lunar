@@ -15,7 +15,7 @@ interface Product
     /**
      * Returns the attributes to be stored against this model.
      */
-    public function mappedAttributes(): Collection;
+    //public function mappedAttributes(): Collection;
 
     /**
      * Return the product type relation.
