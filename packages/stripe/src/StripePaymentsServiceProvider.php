@@ -52,7 +52,6 @@ class StripePaymentsServiceProvider extends ServiceProvider
             $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
         }
 
-
         $this->mergeConfigFrom(__DIR__.'/../config/stripe.php', 'lunar.stripe');
 
         $this->publishes([
