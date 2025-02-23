@@ -39,7 +39,7 @@ class ManageProductInventory extends BaseEditRecord
 
     public static function shouldRegisterNavigation(array $parameters = []): bool
     {
-        return $parameters['record']->variants()->count() == 1;
+        return $parameters['record']->variants()->count() == 1 && $parameters['record']->type !== 'dynamic';
     }
 
     public function getBreadcrumb(): string
