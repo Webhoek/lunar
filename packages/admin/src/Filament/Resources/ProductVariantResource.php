@@ -23,6 +23,10 @@ class ProductVariantResource extends BaseResource
 
     protected static ?string $model = ProductVariantContract::class;
 
+
+    protected static bool $isScopedToTenant = false;
+
+    
     protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::End;
 
     public static function getLabel(): string

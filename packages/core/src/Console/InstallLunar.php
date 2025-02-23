@@ -259,19 +259,14 @@ class InstallLunar extends Command
                     ]);
                 }
 
-    
+                if (! CollectionGroup::count()) {
+                    $this->components->info('Adding an initial collection group');
 
-
-            $this->components->info('Setting up initial attributes');
-
-            $group = AttributeGroup::create([
-                'attributable_type' => Product::morphName(),
-                'name' => collect([
-                    'en' => 'Details',
-                ]),
-                'handle' => 'details',
-                'position' => 1,
-            ]);
+                    CollectionGroup::create([
+                        'name' => 'Main',
+                        'handle' => 'main',
+                    ]);
+                }
 
 
             });
