@@ -30,7 +30,8 @@ class ManageProductPricing extends BaseEditRecord
 
     public static function shouldRegisterNavigation(array $parameters = []): bool
     {
-        return $parameters['record']->variants()->count() == 1 && $parameters['record']->type !== 'dynamic';
+        return $parameters['record']->productType->isManageableRelation('product-pricing')
+            && $parameters['record']->variants()->count() == 1;
     }
 
     public function getOwnerRecord(): Model

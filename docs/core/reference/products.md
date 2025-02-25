@@ -70,6 +70,7 @@ Assigns the appropriate attributes for the product type.
 ```php
 Lunar\Models\ProductType::create([
     'name' => 'Boots',
+    'manageable_relations' => ['product-pricing', 'product-inventory']
 ]);
 ```
 

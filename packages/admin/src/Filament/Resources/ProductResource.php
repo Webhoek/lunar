@@ -302,6 +302,7 @@ class ProductResource extends BaseResource
             ->attributeData()
             ->limitedTooltip()
             ->limit(50)
+            ->sortable()
             ->label(__('lunarpanel::product.table.name.label'))
             ->searchable();
     }
