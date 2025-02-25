@@ -38,6 +38,15 @@ class ProductType extends BaseModel implements Contracts\ProductType
      */
     protected $guarded = [];
 
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'manageable_relations' => 'array'
+    ];
+
     public function mappedAttributes(): MorphToMany
     {
         $prefix = config('lunar.database.table_prefix');
@@ -66,5 +75,23 @@ class ProductType extends BaseModel implements Contracts\ProductType
     public function products(): HasMany
     {
         return $this->hasMany(Product::modelClass());
+    }
+
+    /**
+     * Check if a specific relation is manageable for this product type.
+     *
+     * @param string $relation
+     * @return bool
+     */
+    public function isManageableRelation(string $relation): bool
+    {
+        $manageable = $this->manageable_relations ?? [];
+        
+        // If '*' is in the array, all relations are manageable
+        if (in_array('*', $manageable)) {
+            return true;
+        }
+
+        return in_array($relation, $manageable);
     }
 }
