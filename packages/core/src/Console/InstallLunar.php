@@ -199,6 +199,8 @@ class InstallLunar extends Command
 
             $type = ProductType::create([
                 'name' => 'Stock',
+                'manageable_relations' => ['*']
+
             ]);
 
             $type->mappedAttributes()->attach(
