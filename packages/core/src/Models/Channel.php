@@ -30,7 +30,7 @@ use Lunar\Database\Factories\ChannelFactory;
  */
 class Channel extends BaseModel implements Contracts\Channel
 {
-    //use HasTenant;
+    use HasTenant;
     use HasDefaultRecord;
     use HasFactory;
     use HasMacros;
