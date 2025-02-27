@@ -82,7 +82,7 @@ class LunarPanelManager
         Resources\OrderResource::class,
         Resources\ProductOptionResource::class,
         Resources\ProductResource::class,
-        // Resources\ProductTypeResource::class,
+        Resources\ProductTypeResource::class,
         Resources\ProductVariantResource::class,
         // Resources\StaffResource::class,
         // Resources\StaffResource::class,

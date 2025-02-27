@@ -6,6 +6,9 @@ use Filament\Clusters\Cluster;
  
 class Marketplace extends Cluster
 {
+    protected static ?int $navigationSort = 2;
+
+
     protected static ?string $navigationIcon = 'heroicon-o-squares-2x2';
 
     protected static ?string $navigationLabel = 'Marketplace';

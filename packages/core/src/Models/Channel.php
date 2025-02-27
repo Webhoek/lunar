@@ -2,6 +2,8 @@
 
 namespace Lunar\Models;
 
+use App\Channel\Services\Shopify;
+use App\Channel\Services\Woocommerce;
 use App\Models\Trait\HasTenant;
 use App\Models\Integration;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -80,7 +82,7 @@ class Channel extends BaseModel implements Contracts\Channel
      */
     public function getHandler()
     {
-        return $this->integration?->getHandler();
+        return $this->integration?->getHandler($this);
     }
 
     public function channelable(): MorphTo
