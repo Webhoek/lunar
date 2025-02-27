@@ -2,8 +2,10 @@
 
 namespace Lunar\Models;
 
+use App\Models\Fulfilment\PublishedProduct;
 use App\Models\Supplier;
 use App\Models\Trait\HasTenant;
+use App\Services\Fulfillment\ProductPublisher;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Collection;
@@ -76,7 +78,6 @@ class Product extends BaseModel implements Contracts\Product, SpatieHasMedia
         'attribute_data',
         'product_type_id',
         'status',
-        'is_template',
         'supplier_id',
     ];
 
@@ -215,4 +216,34 @@ class Product extends BaseModel implements Contracts\Product, SpatieHasMedia
             "{$prefix}product_product_option"
         )->withPivot(['position'])->orderByPivot('position');
     }
+
+
+    public function publishments()
+    {
+        return $this->belongsToMany(Channel::class, 'published_products', 'product_id', 'channel_id')
+            ->withPivot(columns: ['preview_url', 'resource_id', 'shop_meta'])
+            ->using(PublishedProduct::class);
+    }
+
+    public function isPublished()
+    {
+        return $this->publishments->count() > 0;
+    }
+
+    public function isPublishedTo(Channel $channel)
+    {
+        return $this->publishments->contains($channel);
+    }
+
+    public function publishedProductFor(Channel $shop)
+    {
+        return $this->publishments->first(fn($p) => $shop);
+    }
+
+
+    public function publish()
+    {
+        return new ProductPublisher($this);
+    }
+
 }

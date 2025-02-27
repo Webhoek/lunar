@@ -2,6 +2,7 @@
 
 namespace Lunar\Models;
 
+use App\Models\Trait\HasTenant;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
@@ -18,6 +19,7 @@ use Lunar\Database\Factories\ProductTypeFactory;
  */
 class ProductType extends BaseModel implements Contracts\ProductType
 {
+    use HasTenant;
     use HasAttributes;
     use HasFactory;
     use HasMacros;

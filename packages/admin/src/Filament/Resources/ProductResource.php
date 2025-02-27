@@ -8,6 +8,7 @@ use Filament\Forms\Components\Component;
 use Filament\Forms\Form;
 use Filament\Pages\SubNavigationPosition;
 use Filament\Resources\RelationManagers\RelationGroup;
+use Filament\Support\Enums\FontWeight;
 use Filament\Support\Facades\FilamentIcon;
 use Filament\Tables;
 use Filament\Tables\Columns\SpatieMediaLibraryImageColumn;
@@ -208,7 +209,6 @@ class ProductResource extends BaseResource
         return Forms\Components\Select::make('product_type_id')
             ->label(__('lunarpanel::product.form.producttype.label'))
             ->relationship('productType', 'name')
-            ->visible(fn (Model $record) => !$record->is_template && !$record->source_product_id)
             ->searchable()
             ->preload()
             ->live()
@@ -279,10 +279,19 @@ class ProductResource extends BaseResource
                 ->square()
                 ->label(''),
             static::getNameTableColumn(),
-            Tables\Columns\TextColumn::make('brand.name')
-                ->label(__('lunarpanel::product.table.brand.label'))
+            // Tables\Columns\TextColumn::make('brand.name')
+            //     ->label(__('lunarpanel::product.table.brand.label'))
+            //     ->toggleable()
+            //     ->searchable(),
+            Tables\Columns\TextColumn::make('supplier.name')
+                ->label(__('lunarpanel::product.table.supplier.label'))
                 ->toggleable()
-                ->searchable(),
+                ->weight(FontWeight::Bold)
+                ->searchable()
+                ->prefix(fn ($record) => $record->supplier?->getFirstMedia('favicons')
+                        ? new \Illuminate\Support\HtmlString('<img src="'.$record->supplier->getFirstMedia('favicons')->getUrl().'" style="width: 16px; height: 16px; margin-right: 4px; display: inline-block; vertical-align: middle;">')
+                        : ''
+                ),
             static::getSkuTableColumn(),
             Tables\Columns\TextColumn::make('variants_sum_stock')
                 ->label(__('lunarpanel::product.table.stock.label'))

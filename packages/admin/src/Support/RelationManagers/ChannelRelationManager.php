@@ -5,9 +5,14 @@ namespace Lunar\Admin\Support\RelationManagers;
 use Filament\Facades\Filament;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Notifications\Notification;
 use Filament\Tables;
+use Filament\Tables\Actions\Action;
 use Filament\Tables\Table;
+use Illuminate\Http\Client\HttpClientException;
 use Lunar\Admin\Events\ModelChannelsUpdated;
+use Lunar\Models\Channel;
+use Lunar\Models\Product;
 
 class ChannelRelationManager extends BaseRelationManager
 {
@@ -98,6 +103,16 @@ class ChannelRelationManager extends BaseRelationManager
                     __('lunarpanel::relationmanagers.channels.table.ends_at.label')
                 )->dateTime(),
             ])->actions([
+                Action::make('publish')->button()->action(function(Channel $record){
+                    try {
+                        $this->ownerRecord->publish()->to($record);
+
+                        Notification::make()->title('Published'); 
+                    } catch (HttpClientException $e) {
+                        Notification::make()->title('Couldnt publish. Shop error.')->danger();
+                        return;
+                    }
+                }),
                 Tables\Actions\EditAction::make()->after(
                     fn () => ModelChannelsUpdated::dispatch(
                         $this->getOwnerRecord()
