@@ -2,6 +2,7 @@
 
 namespace Lunar\Models;
 
+use App\Models\Trait\HasTenant;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\AsArrayObject;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -26,6 +27,8 @@ use Spatie\MediaLibrary\HasMedia as SpatieHasMedia;
  */
 class ProductOption extends BaseModel implements Contracts\ProductOption, SpatieHasMedia
 {
+
+    use HasTenant;
     use HasFactory;
     use HasMacros;
     use HasMedia;

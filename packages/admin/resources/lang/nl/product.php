@@ -40,6 +40,9 @@ return [
         'producttype' => [
             'label' => 'Producttype',
         ],
+        'supplier' => [
+            'label' => 'Leverancier',
+        ],
     ],
 
     'actions' => [

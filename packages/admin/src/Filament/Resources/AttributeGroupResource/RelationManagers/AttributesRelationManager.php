@@ -128,7 +128,13 @@ class AttributesRelationManager extends BaseRelationManager
                     ),
                 Tables\Columns\TextColumn::make('type')->label(
                     __('lunarpanel::attribute.table.type.label')
-                ),
+                )->formatStateUsing(function ($state) {
+                    $langKey = strtolower(
+                        class_basename($state)
+                    );
+
+                    return __("lunarpanel::fieldtypes.{$langKey}.label");
+                })->badge()->color('gray')
             ])
             ->filters([
                 //
