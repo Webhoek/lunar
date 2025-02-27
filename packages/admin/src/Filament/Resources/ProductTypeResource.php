@@ -12,6 +12,7 @@ use Lunar\Admin\Support\Resources\BaseResource;
 use Lunar\Models\Contracts\ProductType as ProductTypeContract;
 use Lunar\Models\Product;
 use Lunar\Models\ProductVariant;
+use Illuminate\Database\Eloquent\Model;
 
 class ProductTypeResource extends BaseResource
 {
@@ -23,6 +24,8 @@ class ProductTypeResource extends BaseResource
 
     protected static ?int $navigationSort = 2;
 
+    protected static bool $isScopedToTenant = false;
+
     public static function getLabel(): string
     {
         return __('lunarpanel::producttype.label');
@@ -33,14 +36,13 @@ class ProductTypeResource extends BaseResource
         return __('lunarpanel::producttype.plural_label');
     }
 
-    public static function getNavigationParentItem(): ?string
-    {
-        return __('lunarpanel::product.plural_label');
-    }
-
+    // public static function getNavigationParentItem(): ?string
+    // {
+    //     return __('lunarpanel::product.plural_label');
+    // }
     public static function getNavigationGroup(): ?string
     {
-        return __('lunarpanel::global.sections.catalog');
+        return __('lunarpanel::global.sections.settings');
     }
 
     public static function getDefaultForm(Forms\Form $form): Forms\Form
@@ -93,6 +95,8 @@ class ProductTypeResource extends BaseResource
     public static function getDefaultTable(Table $table): Table
     {
         return $table
+            ->recordClasses(classes: fn (Model $record) => !$record->tenant_id ? 'opacity-50 ' : null) //cursor-not-allowed pointer-events-none select-none
+            ->checkIfRecordIsSelectableUsing(fn (Model $record): bool => !!$record->tenant_id)
             ->columns(static::getTableColumns())
             ->filters([
                 //

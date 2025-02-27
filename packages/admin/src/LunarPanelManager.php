@@ -81,7 +81,7 @@ class LunarPanelManager
         Resources\OrderResource::class,
         Resources\ProductOptionResource::class,
         Resources\ProductResource::class,
-        // Resources\ProductTypeResource::class,
+        Resources\ProductTypeResource::class,
         Resources\ProductVariantResource::class,
         // Resources\StaffResource::class,
         Resources\TagResource::class,
@@ -263,7 +263,7 @@ class LunarPanelManager
         }
 
         return Panel::make()
-            ->spa()
+            // ->spa()
             ->default()
             ->id($this->panelId)
             ->brandName('lunar')

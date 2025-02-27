@@ -2,6 +2,8 @@
 
 namespace Lunar\Models;
 
+use App\Channel\Services\Shopify;
+use App\Channel\Services\Woocommerce;
 use App\Models\Trait\HasTenant;
 use App\Models\Integration;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -80,7 +82,7 @@ class Channel extends BaseModel implements Contracts\Channel
      */
     public function getHandler()
     {
-        return $this->integration?->getHandler();
+        return $this->integration?->getHandler($this);
     }
 
     public function channelable(): MorphTo
@@ -129,4 +131,23 @@ class Channel extends BaseModel implements Contracts\Channel
             "{$prefix}channelables"
         );
     }
+
+    public function publisher()
+    {
+        return $this->getHandler();
+        // if ($this->platform == 'woocommerce') {
+        //     return new Woocommerce(channel: channel: $this);
+        // }
+
+        // if ($this->platform == 'shopify') {
+        //     return new Shopify($this);
+        // }
+
+        // if ($this->platform == 'prestashop') {
+        //     return new Prestashop($this);
+        // }
+
+        //throw new \Exception('Publisher not found.');
+    }
+
 }

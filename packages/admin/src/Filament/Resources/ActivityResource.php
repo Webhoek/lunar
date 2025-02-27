@@ -9,12 +9,12 @@ use Filament\Support\Facades\FilamentIcon;
 use Filament\Tables;
 use Illuminate\Database\Eloquent\Builder;
 use Lunar\Admin\Filament\Resources\ActivityResource\Pages;
+use Lunar\Admin\Models\Activity;
 use Lunar\Admin\Support\Resources\BaseResource;
-use Spatie\Activitylog\Models\Activity;
 
 class ActivityResource extends BaseResource
 {
-    protected static ?string $permission = 'settings';
+    // protected static ?string $permission = 'settings';
 
     protected static ?string $model = Activity::class;
 
