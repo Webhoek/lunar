@@ -66,9 +66,10 @@ class InstallLunar extends Command
 //            }
 //        }
 
-        if (!$force && confirm('Run database migrations?')) {
-            $this->call('migrate');
-        }
+        $this->call('migrate');
+        // if (!$force && confirm('Run database migrations?')) {
+        //     $this->call('migrate');
+        // }
 
         $class = new \Lunar\Admin\Database\State\EnsureBaseRolesAndPermissions();
         $class->run();
