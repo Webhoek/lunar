@@ -6,6 +6,7 @@ use App\Constants\AnnouncementPlacement;
 use App\Constants\TenancyPermissionConstants;
 use App\Filament\Dashboard\Pages\Team;
 use App\Filament\Dashboard\Pages\TenantSettings;
+use App\Filament\Dashboard\Resources\IntegrationResource;
 use App\Filament\Dashboard\Resources\ChannelResource;
 use App\Filament\Dashboard\Resources\IntegrationResource;
 use App\Filament\Dashboard\Resources\InvitationResource;
@@ -79,6 +80,7 @@ class LunarPanelManager
         Resources\ProductResource::class,
         Resources\ProductTypeResource::class,
         Resources\ProductVariantResource::class,
+        // Resources\StaffResource::class,
         // Resources\StaffResource::class,
         Resources\TagResource::class,
         // Resources\TaxClassResource::class,
