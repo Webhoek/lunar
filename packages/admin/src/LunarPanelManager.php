@@ -16,7 +16,7 @@ use App\Filament\Dashboard\Resources\SubscriptionResource;
 use App\Filament\Dashboard\Resources\TenantIntegrationResource;
 use App\Filament\Dashboard\Resources\TransactionResource;
 use App\Models\Tenant;
-use App\Services\TenantPermissionManager;
+use App\Services\TenantPermissionService;
 use Filament\Facades\Filament;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -312,9 +312,9 @@ class LunarPanelManager
                     ->label('Workspace Settings')
                     ->visible(
                         function () {
-                            $tenantPermissionManager = app(TenantPermissionManager::class);
+                            $tenantPermissionService = app(TenantPermissionService::class);
 
-                            return $tenantPermissionManager->tenantUserHasPermissionTo(
+                            return $tenantPermissionService->tenantUserHasPermissionTo(
                                 Filament::getTenant(),
                                 auth()->user(),
                                 TenancyPermissionConstants::PERMISSION_UPDATE_TENANT_SETTINGS
