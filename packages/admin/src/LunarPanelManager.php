@@ -255,15 +255,7 @@ class LunarPanelManager
                 ->name('lunar.pdf.download')->middleware($panelMiddleware);
         }
 
-        $plugins = [
-            \Leandrocfe\FilamentApexCharts\FilamentApexChartsPlugin::make(),
-        ];
-
-        if (! $this->twoFactorAuthDisabled) {
-            $plugins[] = TwoFactorAuthenticationPlugin::make()->addTwoFactorMenuItem(label: '2FA Settings')
-                ->enforceTwoFactorSetup(condition: $this->twoFactorAuthEnforced);
-        }
-
+        die(); 
         return Panel::make()
             // ->spa()
             ->default()

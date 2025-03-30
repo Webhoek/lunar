@@ -14,8 +14,8 @@ use App\Models\Transaction;
 use App\Models\UserParameter;
 use App\Models\UserStripeData;
 use App\Notifications\Auth\QueuedVerifyEmail;
-use App\Services\OrderManager;
-use App\Services\SubscriptionManager;
+use App\Services\OrderService;
+use App\Services\SubscriptionService;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Models\Contracts\HasName;
 use Filament\Models\Contracts\HasTenants;
@@ -32,9 +32,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Collection;
 use Lunar\Admin\Database\Factories\StaffFactory;
 use Spatie\Permission\Traits\HasRoles;
-use Stancl\Tenancy\Database\Concerns\BelongsToTenant;
-use Stancl\Tenancy\Database\Concerns\CentralConnection;
-use Stancl\Tenancy\Database\Concerns\TenantConnection;
+
 
 class Staff extends Authenticatable implements FilamentUser, HasName,  MustVerifyEmail, HasTenants
 {
@@ -303,7 +301,7 @@ class Staff extends Authenticatable implements FilamentUser, HasName,  MustVerif
     public function isSubscribed(?string $productSlug = null, ?Tenant $tenant = null): bool
     {
         /** @var SubscriptionManager $subscriptionManager */
-        $subscriptionManager = app(SubscriptionManager::class);
+        $subscriptionManager = app(SubscriptionService::class);
 
         return $subscriptionManager->isUserSubscribed($this, $productSlug, $tenant);
     }
@@ -311,7 +309,7 @@ class Staff extends Authenticatable implements FilamentUser, HasName,  MustVerif
     public function isTrialing(?string $productSlug = null, ?Tenant $tenant = null): bool
     {
         /** @var SubscriptionManager $subscriptionManager */
-        $subscriptionManager = app(SubscriptionManager::class);
+        $subscriptionManager = app(SubscriptionService::class);
 
         return $subscriptionManager->isUserTrialing($this, $productSlug, $tenant);
     }
@@ -319,7 +317,7 @@ class Staff extends Authenticatable implements FilamentUser, HasName,  MustVerif
     public function hasPurchased(?string $productSlug = null, ?Tenant $tenant = null): bool
     {
         /** @var OrderManager $orderManager */
-        $orderManager = app(OrderManager::class);
+        $orderManager = app(OrderService::class);
 
         return $orderManager->hasUserOrdered($this, $productSlug, $tenant);
     }
