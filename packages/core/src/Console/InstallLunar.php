@@ -23,9 +23,6 @@ use Lunar\Models\Product;
 use Lunar\Models\ProductType;
 use Lunar\Models\TaxClass;
 use App\Scopes\TenantScope;
-use Lunar\Models\TaxZone;
-use App\Scopes\TenantScope;
-
 use function Laravel\Prompts\confirm;
 
 class InstallLunar extends Command

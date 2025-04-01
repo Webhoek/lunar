@@ -1,13 +1,12 @@
 <?php
- 
- namespace Lunar\Admin\Filament\Clusters;
- 
+
+namespace Lunar\Admin\Filament\Clusters;
+
 use Filament\Clusters\Cluster;
- 
+
 class Marketplace extends Cluster
 {
     protected static ?int $navigationSort = 2;
-
 
     protected static ?string $navigationIcon = 'heroicon-o-squares-2x2';
 
@@ -15,10 +14,10 @@ class Marketplace extends Cluster
 
     protected static ?string $slug = 'marketplace';
 
-    protected static ?string $clusterBreadcrumb = 'marketplace';
+    protected static ?string $clusterBreadcrumb = 'Marketplace';
     
-    public static function navigation(): bool
+    public static function shouldRegisterNavigation(): bool
     {
-        return false; // Keep this true if you want the cluster itself in the menu
+        return false;
     }
 }
