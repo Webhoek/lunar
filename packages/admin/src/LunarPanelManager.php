@@ -8,7 +8,6 @@ use App\Filament\Dashboard\Pages\Team;
 use App\Filament\Dashboard\Pages\TenantSettings;
 use App\Filament\Dashboard\Resources\IntegrationResource;
 use App\Filament\Dashboard\Resources\ChannelResource;
-use App\Filament\Dashboard\Resources\IntegrationResource;
 use App\Filament\Dashboard\Resources\InvitationResource;
 use App\Filament\Dashboard\Resources\SupplierResource;
 use App\Filament\Dashboard\Resources\OrderResource;
@@ -237,7 +236,6 @@ class LunarPanelManager
                 ->name('lunar.pdf.download')->middleware($panelMiddleware);
         }
 
-        die(); 
         return Panel::make()
             // ->spa()
             ->default()
@@ -268,8 +266,8 @@ class LunarPanelManager
                 static::getResources()
             )
             ->discoverClusters(
-                in: realpath(__DIR__.'/Filament/Clusters'),
-                for: 'Lunar\Admin\Filament\Clusters'
+                in: app_path('Filament/Dashboard/Clusters'),
+                for: 'App\Filament\Dashboard\Clusters'
             )
             ->widgets(
                 static::getWidgets()
