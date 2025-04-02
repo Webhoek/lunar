@@ -102,6 +102,17 @@ class ChannelRelationManager extends BaseRelationManager
                 Tables\Columns\TextColumn::make('ends_at')->label(
                     __('lunarpanel::relationmanagers.channels.table.ends_at.label')
                 )->dateTime(),
+                Tables\Columns\IconColumn::make('is_published')
+                    ->label(__('lunarpanel::relationmanagers.channels.table.is_published.label'))
+                    ->getStateUsing(fn ($record) => $this->getOwnerRecord()->isPublishedTo($record))
+                    ->color(fn (bool $state): string => match ($state) {
+                        true => 'success',
+                        false => 'warning',
+                    })
+                    ->icon(fn (bool $state): string => match ($state) {
+                        false => 'heroicon-o-x-circle',
+                        true => 'heroicon-o-check-circle',
+                    }),
             ])->actions([
                 Action::make('publish')->button()->action(function(Channel $record){
                     try {
@@ -113,6 +124,14 @@ class ChannelRelationManager extends BaseRelationManager
                         return;
                     }
                 }),
+                
+                Action::make('view_in_shop')
+                    ->label(__('lunarpanel::relationmanagers.channels.actions.view_in_shop.label'))
+                    ->icon('heroicon-o-arrow-top-right-on-square')
+                    ->url(fn (Channel $record) => $this->getOwnerRecord()->publishedProductFor($record)?->preview_url)
+                    ->openUrlInNewTab()
+                    ->visible(fn (Channel $record) => $this->getOwnerRecord()->isPublishedTo($record)),
+                
                 Tables\Actions\EditAction::make()->after(
                     fn () => ModelChannelsUpdated::dispatch(
                         $this->getOwnerRecord()
