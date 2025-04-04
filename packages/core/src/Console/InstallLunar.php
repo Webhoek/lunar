@@ -221,9 +221,14 @@ class InstallLunar extends Command
 
                     Channel::create([
                         'name' => 'Webstore',
-                        'handle' => 'webstore',
+                        'handle' => 'brightnexo-test-shop.local',
                         'default' => true,
-                        'url' => 'http://localhost',
+                        'integration_id' => 1,
+                        'settings' => [
+                            'api_key' => 'ck_5aeca9fab95fc09223bd77512c8aaf865332f8ae',
+                            'api_secret' => 'cs_9fc1b14510d82564ed49db833f4d6a9cf3fa47de',
+                        ],
+                        'url' => 'https://brightnexo-test-shop.local',
                     ]);
                 }
 

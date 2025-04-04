@@ -14,7 +14,7 @@ return new class extends Migration
             $table->nestedSet();
             $table->string('handle')->unique();
             $table->string('type')->default('static')->index();
-            $table->json('attribute_data');
+            $table->jsonb('attribute_data');
             $table->string('sort')->default('custom')->index();
             $table->timestamps();
             $table->softDeletes();
