@@ -208,7 +208,7 @@ class InstallLunar extends Command
             );
         });
 
-        DB::transaction(function () {
+        //DB::transaction(function () {
 
             $tenants = Tenant::all();
 
@@ -227,7 +227,7 @@ class InstallLunar extends Command
                     ]);
                 }
 
-                if (! Language::count()) {
+                if (! Language::withGlobalScope(TenantScope::class, new TenantScope)->count()) {
                     $this->components->info('Adding default language');
 
                     Language::create([
@@ -237,7 +237,7 @@ class InstallLunar extends Command
                     ]);
                 }
 
-                if (! Currency::whereDefault(true)->exists()) {
+                if (! Currency::withGlobalScope(TenantScope::class, new TenantScope)->whereDefault(true)->exists()) {
                     $this->components->info('Adding a default currency (USD)');
 
                     Currency::create([
@@ -250,7 +250,7 @@ class InstallLunar extends Command
                     ]);
                 }
 
-                if (! CustomerGroup::whereDefault(true)->exists()) {
+                if (! CustomerGroup::withGlobalScope(TenantScope::class, new TenantScope)->whereDefault(true)->exists()) {
                     $this->components->info('Adding a default customer group.');
 
                     CustomerGroup::create([
@@ -260,18 +260,17 @@ class InstallLunar extends Command
                     ]);
                 }
 
-                if (! CollectionGroup::count()) {
+                if (! CollectionGroup::withGlobalScope(TenantScope::class, new TenantScope)->count()) {
                     $this->components->info('Adding an initial collection group');
 
-                    CollectionGroup::create([
+                    CollectionGroup::withGlobalScope(TenantScope::class, new TenantScope)->create([
                         'name' => 'Main',
                         'handle' => 'main',
                     ]);
                 }
 
-
             });
-        });
+       // });
 
         // $this->components->info('Publishing Filament assets');
         // $this->call('filament:assets');
