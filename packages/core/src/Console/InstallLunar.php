@@ -216,7 +216,7 @@ class InstallLunar extends Command
                 $this->components->info('Start Importing tenant '. $tenant->name);
                 Filament::setTenant($tenant, true);
 
-                if (! Channel::withGlobalScope(TenantScope::class, new TenantScope)->whereDefault(true)->exists()) {
+                if (! Channel::where('tenant_id', $tenant->id)->whereDefault(true)->exists()) {
                     $this->components->info('Setting up default channel');
 
                     Channel::create([
@@ -227,7 +227,7 @@ class InstallLunar extends Command
                     ]);
                 }
 
-                if (! Language::withGlobalScope(TenantScope::class, new TenantScope)->count()) {
+                if (! Language::where('tenant_id', $tenant->id)->count()) {
                     $this->components->info('Adding default language');
 
                     Language::create([
@@ -237,7 +237,7 @@ class InstallLunar extends Command
                     ]);
                 }
 
-                if (! Currency::withGlobalScope(TenantScope::class, new TenantScope)->whereDefault(true)->exists()) {
+                if (! Currency::where('tenant_id', $tenant->id)->whereDefault(true)->exists()) {
                     $this->components->info('Adding a default currency (USD)');
 
                     Currency::create([
@@ -250,7 +250,7 @@ class InstallLunar extends Command
                     ]);
                 }
 
-                if (! CustomerGroup::withGlobalScope(TenantScope::class, new TenantScope)->whereDefault(true)->exists()) {
+                if (! CustomerGroup::where('tenant_id', $tenant->id)->whereDefault(true)->exists()) {
                     $this->components->info('Adding a default customer group.');
 
                     CustomerGroup::create([
@@ -260,12 +260,13 @@ class InstallLunar extends Command
                     ]);
                 }
 
-                if (! CollectionGroup::withGlobalScope(TenantScope::class, new TenantScope)->count()) {
+                if (! CollectionGroup::where('tenant_id', $tenant->id)->count()) {
                     $this->components->info('Adding an initial collection group');
 
-                    CollectionGroup::withGlobalScope(TenantScope::class, new TenantScope)->create([
+                    CollectionGroup::create([
                         'name' => 'Main',
                         'handle' => 'main',
+                        'tenant_id' => $tenant->id,
                     ]);
                 }
 
