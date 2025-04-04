@@ -229,6 +229,7 @@ class LunarServiceProvider extends ServiceProvider
                 MigrateGetCandy::class,
                 SyncNewCustomerOrders::class,
                 PruneCarts::class,
+                \Lunar\Console\AddPrintCollections::class,
             ]);
 
             if (config('lunar.cart.prune_tables.enabled', false)) {

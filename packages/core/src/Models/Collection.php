@@ -2,6 +2,7 @@
 
 namespace Lunar\Models;
 
+use App\Models\Trait\HasTenant;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -35,17 +36,18 @@ use Spatie\MediaLibrary\HasMedia as SpatieHasMedia;
  */
 class Collection extends BaseModel implements Contracts\Collection, SpatieHasMedia
 {
-    use HasChannels,
+    use HasTenant,
+        HasChannels,
         HasCustomerGroups,
         HasFactory,
         HasMacros,
         HasMedia,
         HasTranslations,
-        HasUrls,
-        NodeTrait,
-        Searchable {
-            NodeTrait::usesSoftDelete insteadof Searchable;
-        }
+        //HasUrls,
+        NodeTrait;
+        // Searchable {
+        //     NodeTrait::usesSoftDelete insteadof Searchable;
+        // }
 
     /**
      * Define which attributes should be cast.

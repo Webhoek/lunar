@@ -12,6 +12,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('collection_group_id')->constrained($this->prefix.'collection_groups');
             $table->nestedSet();
+            $table->string('handle')->unique();
             $table->string('type')->default('static')->index();
             $table->json('attribute_data');
             $table->string('sort')->default('custom')->index();

@@ -13,6 +13,7 @@ return new class extends Migration
             $table->string('code')->unique();
             $table->string('name');
             $table->boolean('default')->default(false)->index();
+            $table->foreignId('tenant_id')->nullable()->constrained();
             $table->timestamps();
         });
     }
