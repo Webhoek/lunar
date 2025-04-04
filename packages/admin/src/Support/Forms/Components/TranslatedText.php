@@ -2,7 +2,9 @@
 
 namespace Lunar\Admin\Support\Forms\Components;
 
+use App\Scopes\TenantScope;
 use Closure;
+use Filament\Facades\Filament;
 use Filament\Forms\ComponentContainer;
 use Filament\Forms\Components\Component;
 use Filament\Forms\Components\TextInput;
@@ -45,7 +47,8 @@ class TranslatedText extends TextInput
     {
         parent::setUp();
 
-        $this->languages = Language::orderBy('default', 'desc')->get();
+        $this->languages = Language::orderBy('default', 'desc')->tenant()->get();
+        $this->defaultLanguage = $this->languages->first(fn ($lang) => $lang->default);
 
         $this->default(static function (TranslatedText $component): array {
             return $component->getLanguageDefaults();
@@ -161,6 +164,7 @@ class TranslatedText extends TextInput
         return ComponentContainer::make($this->getLivewire())
             ->parentComponent($this)
             ->components(
+                
                 $this->components
                     ->filter(fn ($component): bool => $component->getName() == $language->code)
                     ->map(fn ($component) => $this->prepareTranslateLocaleComponent($component, $language->code))

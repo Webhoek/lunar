@@ -28,7 +28,13 @@ trait HasDefaultRecord
         $key = 'lunar_default_'.Str::snake(self::class);
 
         return Blink::once($key, function () {
-            return self::query()->default(true)->first();
+            $query = self::query()->default(true);
+            
+            // if (method_exists(self::class, 'scopeTenant')) {
+            //     $query->whereTenant();
+            // }
+            
+            return $query->first();
         });
     }
 }

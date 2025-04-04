@@ -96,7 +96,7 @@ class CollectionResource extends BaseResource
             Pages\ManageCollectionProducts::class,
             Pages\ManageCollectionAvailability::class,
             Pages\ManageCollectionMedia::class,
-            Pages\ManageCollectionUrls::class,
+            //Pages\ManageCollectionUrls::class,
         ];
     }
 
@@ -109,7 +109,7 @@ class CollectionResource extends BaseResource
             'products' => Pages\ManageCollectionProducts::route('/{record}/products'),
             'edit' => Pages\EditCollection::route('/{record}/edit'),
             'media' => Pages\ManageCollectionMedia::route('/{record}/media'),
-            'urls' => Pages\ManageCollectionUrls::route('/{record}/urls'),
+            //'urls' => Pages\ManageCollectionUrls::route('/{record}/urls'),
         ];
     }
 
