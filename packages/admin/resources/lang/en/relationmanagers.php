@@ -83,6 +83,9 @@ return [
             'ends_at' => [
                 'label' => 'End Date',
             ],
+            'is_published' => [
+                'label' => 'Published',
+            ],
         ],
     ],
     'medias' => [
