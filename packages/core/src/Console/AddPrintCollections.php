@@ -48,8 +48,8 @@ class AddPrintCollections extends Command
     private function addPrintCollections(): void
     {
         // Get or create a collection group for print categories
-        $printGroup = CollectionGroup::withGlobalScope(TenantScope::class, new TenantScope)->firstOrCreate(
-            ['handle' => 'print-categories'],
+        $printGroup = CollectionGroup::firstOrCreate(
+            ['handle' => 'print-categories', 'tenant_id' => Filament::getTenant()->id],
             ['name' => 'Print Categories']
         );
 
@@ -210,7 +210,8 @@ class AddPrintCollections extends Command
         // Create collections for each category
         foreach ($printCategories as $handle => $categoryData) {
             // First check if collection exists by handle
-            $collection = Collection::withGlobalScope(TenantScope::class, new TenantScope)->where('collection_group_id', $printGroup->id)
+            $collection = Collection::where('collection_group_id', $printGroup->id)
+                ->tenant()
                 ->where('handle', $handle)
                 ->first();
 

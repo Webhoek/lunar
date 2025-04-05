@@ -59,10 +59,14 @@ class Staff extends Authenticatable implements FilamentUser, HasName,  MustVerif
         'lastname',
         'admin',
         'email',
+        'phone',
         'password',
         'is_admin',
         'public_name',
         'is_blocked',
+        'language',
+        'last_activity_at',
+        'legacy_id',
     ];
 
     protected $guard_name = 'staff';
@@ -84,6 +88,7 @@ class Staff extends Authenticatable implements FilamentUser, HasName,  MustVerif
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'last_activity_at' => 'datetime',
         'password' => 'hashed',
     ];
 

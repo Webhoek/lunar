@@ -58,6 +58,7 @@ class UrlObserver
         // Wrap here so we avoid a query if it's not been set to default.
         if ($savedUrl->default) {
             $url = Url::whereDefault(true)
+                //->tenant() ??
                 ->where('id', '!=', $savedUrl->id)
                 ->whereElementType($savedUrl->element_type)
                 ->whereElementId($savedUrl->element_id)

@@ -56,7 +56,7 @@ class CustomerGroupObserver
         // Wrap here so we avoid a query if it's not been set to default.
         if ($savedCustomerGroup->default) {
             CustomerGroup::withoutEvents(function () use ($savedCustomerGroup) {
-                CustomerGroup::whereDefault(true)->where('id', '!=', $savedCustomerGroup->id)->update([
+                CustomerGroup::whereDefault(true)->tenant()->where('id', '!=', $savedCustomerGroup->id)->update([
                     'default' => false,
                 ]);
             });
