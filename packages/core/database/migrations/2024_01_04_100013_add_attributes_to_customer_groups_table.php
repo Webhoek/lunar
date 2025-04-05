@@ -9,7 +9,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table($this->prefix.'customer_groups', function (Blueprint $table) {
-            $table->json('attribute_data')->after('default')->nullable();
+            $table->jsonb('attribute_data')->after('default')->nullable();
         });
     }
 

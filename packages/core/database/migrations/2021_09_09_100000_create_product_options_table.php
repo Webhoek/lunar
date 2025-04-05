@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::create($this->prefix.'product_options', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->json('name');
+            $table->jsonb('name');
             $table->timestamps();
         });
     }

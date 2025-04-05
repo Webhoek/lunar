@@ -9,7 +9,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table($this->prefix.'product_variants', function (Blueprint $table) {
-            $table->json('attribute_data')->after('tax_class_id')->nullable();
+            $table->jsonb('attribute_data')->after('tax_class_id')->nullable();
         });
     }
 

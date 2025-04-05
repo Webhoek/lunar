@@ -18,7 +18,7 @@ return new class extends Migration
             $table->integer('sub_total')->unsigned()->index();
             $table->integer('discount_total')->default(0)->unsigned()->index();
             $table->integer('shipping_total')->default(0)->unsigned()->index();
-            $table->json('tax_breakdown');
+            $table->jsonb('tax_breakdown');
             $table->integer('tax_total')->unsigned()->index();
             $table->integer('total')->unsigned()->index();
             $table->text('notes')->nullable();
@@ -26,7 +26,7 @@ return new class extends Migration
             $table->string('compare_currency_code', 3)->nullable();
             $table->decimal('exchange_rate', 10, 4)->default(1);
             $table->dateTime('placed_at')->nullable()->index();
-            $table->json('meta')->nullable();
+            $table->jsonb('meta')->nullable();
             $table->timestamps();
         });
     }
