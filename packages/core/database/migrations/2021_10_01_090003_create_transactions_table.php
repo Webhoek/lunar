@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('notes')->nullable();
             $table->string('card_type', 25)->index();
             $table->smallInteger('last_four');
-            $table->json('meta')->nullable();
+            $table->jsonb('meta')->nullable();
             $table->timestamps();
         });
     }
