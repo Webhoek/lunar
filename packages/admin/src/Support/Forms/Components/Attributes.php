@@ -29,24 +29,24 @@ class Attributes extends Forms\Components\Group
     {
         parent::setUp();
 
-        $this->statePath('attribute_data');
-
+        $this->key('attributeData'.$this->modelClassOverride);
+        
         if (blank($this->childComponents)) {
             $this->schema(function (\Filament\Forms\Get $get, Livewire $livewire, ?Model $record) {
-                $modelClass = $this->attributableType ?? $livewire::getResource()::getModel();
-
+                $modelClass = $this->modelClassOverride ?: $livewire::getResource()::getModel();
+                
                 $productTypeId = null;
 
                 $morphMap = $modelClass::morphName();
-
                 
+                //dd($record->attribute_data);
                 $attributeQuery = Attribute::where('attribute_type', $morphMap);
 
                 // Products are unique in that they use product types to map attributes, so we need
                 // to try and find the product type ID
                 if ($morphMap == Product::morphName()) {
                     $productTypeId = $record?->product_type_id ?: ProductType::first()->id;
-
+                    
                     // If we have a product type, the attributes should be based off that.
                     if ($productTypeId) {
                         $attributeQuery = ProductType::find($productTypeId)->productAttributes();

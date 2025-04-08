@@ -47,7 +47,11 @@ class TranslatedText extends TextInput
     {
         parent::setUp();
 
-        $this->languages = Language::orderBy('default', 'desc')->tenant()->get();
+        if($tenant = Filament::getTenant()){
+            $this->languages = Language::orderBy('default', 'desc')->where('tenant_id', $tenant->id)->get();
+        } else {
+            $this->languages = Language::orderBy('default', 'desc')->limit(2)->get();
+        }
         $this->defaultLanguage = $this->languages->first(fn ($lang) => $lang->default);
 
         $this->default(static function (TranslatedText $component): array {

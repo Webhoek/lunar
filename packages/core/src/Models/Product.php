@@ -79,7 +79,7 @@ class Product extends BaseModel implements Contracts\Product, SpatieHasMedia
         'attribute_data',
         'product_type_id',
         'status',
-        'supplier_id',
+        'supplier_id'
     ];
 
     /**
