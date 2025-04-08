@@ -208,75 +208,10 @@ class InstallLunar extends Command
             );
         });
 
-        //DB::transaction(function () {
+        DB::transaction(function () {
 
-            $tenants = Tenant::all();
-
-            $tenants->each(function($tenant){
-                $this->components->info('Start Importing tenant '. $tenant->name);
-                Filament::setTenant($tenant, true);
-
-                if (! Channel::where('tenant_id', $tenant->id)->whereDefault(true)->exists()) {
-                    $this->components->info('Setting up default channel');
-
-                    Channel::create([
-                        'name' => 'Webstore',
-                        'handle' => 'brightnexo-test-shop.local',
-                        'default' => true,
-                        'integration_id' => 1,
-                        'settings' => [
-                            'api_key' => 'ck_5aeca9fab95fc09223bd77512c8aaf865332f8ae',
-                            'api_secret' => 'cs_9fc1b14510d82564ed49db833f4d6a9cf3fa47de',
-                        ],
-                        'url' => 'https://brightnexo-test-shop.local',
-                    ]);
-                }
-
-                if (! Language::where('tenant_id', $tenant->id)->count()) {
-                    $this->components->info('Adding default language');
-
-                    Language::create([
-                        'code' => 'en',
-                        'name' => 'English',
-                        'default' => true,
-                    ]);
-                }
-
-                if (! Currency::where('tenant_id', $tenant->id)->whereDefault(true)->exists()) {
-                    $this->components->info('Adding a default currency (USD)');
-
-                    Currency::create([
-                        'code' => 'USD',
-                        'name' => 'US Dollar',
-                        'exchange_rate' => 1,
-                        'decimal_places' => 2,
-                        'default' => true,
-                        'enabled' => true,
-                    ]);
-                }
-
-                if (! CustomerGroup::where('tenant_id', $tenant->id)->whereDefault(true)->exists()) {
-                    $this->components->info('Adding a default customer group.');
-
-                    CustomerGroup::create([
-                        'name' => 'Retail',
-                        'handle' => 'retail',
-                        'default' => true,
-                    ]);
-                }
-
-                if (! CollectionGroup::where('tenant_id', $tenant->id)->count()) {
-                    $this->components->info('Adding an initial collection group');
-
-                    CollectionGroup::create([
-                        'name' => 'Main',
-                        'handle' => 'main',
-                        'tenant_id' => $tenant->id,
-                    ]);
-                }
-
-            });
-       // });
+            $this->call('lunar:seed-tenant', ['--all' => true]);
+        });
 
         // $this->components->info('Publishing Filament assets');
         // $this->call('filament:assets');
