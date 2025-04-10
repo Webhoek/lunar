@@ -54,6 +54,9 @@ return [
             'attach' => [
                 'label' => 'Schedule another Channel',
             ],
+            'view_in_shop' => [
+                'label' => 'View in Shop',
+            ],
         ],
         'form' => [
             'enabled' => [

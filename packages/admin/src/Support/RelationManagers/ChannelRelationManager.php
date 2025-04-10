@@ -5,6 +5,7 @@ namespace Lunar\Admin\Support\RelationManagers;
 use Filament\Facades\Filament;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Notifications\Actions\Action as ActionsAction;
 use Filament\Notifications\Notification;
 use Filament\Tables;
 use Filament\Tables\Actions\Action;
@@ -118,9 +119,27 @@ class ChannelRelationManager extends BaseRelationManager
                     try {
                         $this->ownerRecord->publish()->to($record);
 
-                        Notification::make()->title('Published'); 
+                        Notification::make()
+                            ->title('Product Synced')
+                            ->success()
+                            ->icon('heroicon-o-check-circle')
+                            ->body('Your product has been successfully synced to the channel.')
+                            ->persistent()
+                            ->actions([
+                                ActionsAction::make('view')
+                                    ->button()
+                                    ->url($this->getOwnerRecord()->publishedProductFor($record)?->pivot->preview_url)
+                                    ->openUrlInNewTab(),
+                            ])
+                            ->send();
                     } catch (HttpClientException $e) {
-                        Notification::make()->title('Couldnt publish. Shop error.')->danger();
+                        Notification::make()
+                            ->title('Publishing Failed')
+                            ->danger()
+                            ->icon('heroicon-o-x-circle')
+                            ->body('Could not publish to the shop. Please try again later.')
+                            ->persistent()
+                            ->send();
                         return;
                     }
                 }),
@@ -128,7 +147,7 @@ class ChannelRelationManager extends BaseRelationManager
                 Action::make('view_in_shop')
                     ->label(__('lunarpanel::relationmanagers.channels.actions.view_in_shop.label'))
                     ->icon('heroicon-o-arrow-top-right-on-square')
-                    ->url(fn (Channel $record) => $this->getOwnerRecord()->publishedProductFor($record)?->preview_url)
+                    ->url(fn (Channel $record) => $this->getOwnerRecord()->publishedProductFor($record)?->pivot->preview_url)
                     ->openUrlInNewTab()
                     ->visible(fn (Channel $record) => $this->getOwnerRecord()->isPublishedTo($record)),
                 

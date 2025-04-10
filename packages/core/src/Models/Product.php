@@ -222,7 +222,7 @@ class Product extends BaseModel implements Contracts\Product, SpatieHasMedia
     public function publishments()
     {
         return $this->belongsToMany(Channel::class, 'published_products', 'product_id', 'channel_id')
-            ->withPivot(columns: ['preview_url', 'resource_id', 'shop_meta'])
+            ->withPivot(columns: ['preview_url', 'resource_id', 'channel_meta'])
             ->using(PublishedProduct::class);
     }
 
@@ -238,6 +238,7 @@ class Product extends BaseModel implements Contracts\Product, SpatieHasMedia
 
     public function publishedProductFor(Channel $shop)
     {
+    
         return $this->publishments->first(fn($p) => $shop);
     }
 

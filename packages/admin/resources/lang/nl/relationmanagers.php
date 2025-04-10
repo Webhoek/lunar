@@ -54,6 +54,9 @@ return [
             'attach' => [
                 'label' => 'Nog een Kanaal Inplannen',
             ],
+            'view_in_shop' => [
+                'label' => 'Bekijk in Winkel',
+            ],
         ],
         'form' => [
             'enabled' => [
