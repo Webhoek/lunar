@@ -2,12 +2,14 @@
 
 namespace Lunar\Admin\Support\Forms;
 
+use BrightNexo\Core\FieldTypes\RichEditor;
 use Filament\Forms\Components\Component;
 use Illuminate\Support\Collection;
 use Lunar\Admin\Support\FieldTypes\Dropdown;
 use Lunar\Admin\Support\FieldTypes\File;
 use Lunar\Admin\Support\FieldTypes\ListField;
 use Lunar\Admin\Support\FieldTypes\Number;
+use Lunar\Admin\Support\FieldTypes\RichEditor as FieldTypesRichEditor;
 use Lunar\Admin\Support\FieldTypes\TextField;
 use Lunar\Admin\Support\FieldTypes\Toggle;
 use Lunar\Admin\Support\FieldTypes\TranslatedText;
@@ -36,6 +38,7 @@ class AttributeData
         VimeoFieldType::class => Vimeo::class,
         NumberFieldType::class => Number::class,
         FileFieldType::class => File::class,
+        FieldTypesRichEditor::class => RichEditor::class,
     ];
 
     public function getFilamentComponent(Attribute $attribute): Component

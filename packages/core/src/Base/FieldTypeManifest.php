@@ -8,6 +8,7 @@ use Lunar\FieldTypes\Dropdown;
 use Lunar\FieldTypes\File;
 use Lunar\FieldTypes\ListField;
 use Lunar\FieldTypes\Number;
+use Lunar\FieldTypes\RichEditor;
 use Lunar\FieldTypes\Text;
 use Lunar\FieldTypes\Toggle;
 use Lunar\FieldTypes\TranslatedText;
@@ -33,6 +34,7 @@ class FieldTypeManifest
             TranslatedText::class,
             YouTube::class,
             File::class,
+            RichEditor::class,
         ]);
     }
 
