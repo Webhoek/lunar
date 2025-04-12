@@ -300,7 +300,7 @@ class ProductVariantResource extends BaseResource
 
     protected static function getAttributeDataFormComponent(): Component
     {
-        return Attributes::make()->statePath('attribute_data');
+        return Attributes::make();
     }
 
     public static function getDefaultTable(Table $table): Table
