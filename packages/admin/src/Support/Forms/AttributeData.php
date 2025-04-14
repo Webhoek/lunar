@@ -38,7 +38,7 @@ class AttributeData
         VimeoFieldType::class => Vimeo::class,
         NumberFieldType::class => Number::class,
         FileFieldType::class => File::class,
-        FieldTypesRichEditor::class => RichEditor::class,
+        //FieldTypesRichEditor::class => RichEditor::class,
     ];
 
     public function getFilamentComponent(Attribute $attribute): Component
