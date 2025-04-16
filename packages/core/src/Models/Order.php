@@ -162,6 +162,11 @@ class Order extends BaseModel implements Contracts\Order
         return $this->transactions()->whereType('refund');
     }
 
+    public function supplierOrders(): HasMany
+    {
+        return $this->hasMany(SupplierOrder::class);
+    }
+
     public function customer(): BelongsTo
     {
         return $this->belongsTo(Customer::class);

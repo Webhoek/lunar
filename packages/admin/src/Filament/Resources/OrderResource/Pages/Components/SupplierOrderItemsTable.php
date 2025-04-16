@@ -16,17 +16,22 @@ use Livewire\Attributes\Computed;
 use Lunar\Admin\Livewire\Components\TableComponent;
 use Lunar\Admin\Support\Concerns\CallsHooks;
 use Lunar\Admin\Support\Tables\Components\KeyValue;
+use Lunar\Models\Order;
+use Lunar\Models\SupplierOrder;
 use Lunar\Models\Transaction;
 
-/**
- * @property \Illuminate\Support\Collection $charges
- * @property \Illuminate\Support\Collection $refunds
- * @property float $availableToRefund
- * @property bool $canBeRefunded
- */
-class OrderItemsTable extends TableComponent
+class SupplierOrderItemsTable extends TableComponent
 {
     use CallsHooks;
+
+    public Order $order;
+    public SupplierOrder $supplierOrder;
+
+    public function mount(Order $order, SupplierOrder $supplierOrder): void
+    {
+        $this->order = $order;
+        $this->supplierOrder = $supplierOrder;
+    }
 
     public static function getOrderLinesTableColumns(): array
     {
@@ -49,9 +54,6 @@ class OrderItemsTable extends TableComponent
                             Tables\Columns\TextColumn::make('options')
                                 ->getStateUsing(fn ($record) => $record->purchasable?->getOptions())
                                 ->badge(),
-                            Tables\Columns\TextColumn::make('purchasable.supplier.name')
-                                ->label('Supplier')
-                                ->color(Color::Gray),
                         ]),
                         Tables\Columns\Layout\Stack::make([
                             Tables\Columns\TextColumn::make('unit')
@@ -109,15 +111,11 @@ class OrderItemsTable extends TableComponent
     public function getDefaultTable(Table $table): Table
     {
         return $table
-            ->query($this->record->lines()->getQuery()
+            ->query($this->order->lines()
+                ->where('supplier_order_id', $this->supplierOrder->id)
                 ->wherein('type', ['physical', 'digital'])
                 ->with(['purchasable.supplier']))
             ->columns(static::getOrderLinesTableColumns())
-            ->groups([
-                Tables\Grouping\Group::make('purchasable.supplier.name')
-                    ->label('Supplier')
-                    ->collapsible(),
-            ])
             ->bulkActions([
                 $this->getBulkRefundAction(),
             ]);
@@ -148,11 +146,11 @@ class OrderItemsTable extends TableComponent
                 Forms\Components\TextInput::make('amount')
                     ->required()
                     ->label(__('lunarpanel::order.form.amount.label'))
-                    ->suffix(fn () => $this->record->currency->code)
-                    ->default(fn () => number_format($this->record->lines()->whereIn('id', $this->selectedTableRecords)->get()->sum('total.value') / $this->record->currency->factor, $this->record->currency->decimal_places, '.', ''))
+                    ->suffix(fn () => $this->order->currency->code)
+                    ->default(fn () => number_format($this->order->lines()->whereIn('id', $this->selectedTableRecords)->get()->sum('total.value') / $this->order->currency->factor, $this->order->currency->decimal_places, '.', ''))
                     ->live()
                     ->minValue(
-                        1 / $this->record->currency->factor
+                        1 / $this->order->currency->factor
                     )
                     ->numeric(),
 
@@ -176,7 +174,7 @@ class OrderItemsTable extends TableComponent
             ->action(function ($data, BulkAction $action) {
                 $transaction = Transaction::findOrFail($data['transaction']);
 
-                $response = $transaction->refund(bcmul($data['amount'], $this->record->currency->factor), $data['notes']);
+                $response = $transaction->refund(bcmul($data['amount'], $this->order->currency->factor), $data['notes']);
 
                 if (! $response->success) {
                     $action->failureNotification(
@@ -202,13 +200,13 @@ class OrderItemsTable extends TableComponent
     #[Computed]
     public function charges(): \Illuminate\Support\Collection
     {
-        return $this->record->transactions()->whereType('capture')->whereSuccess(true)->get();
+        return $this->order->transactions()->whereType('capture')->whereSuccess(true)->get();
     }
 
     #[Computed]
     public function refunds(): \Illuminate\Support\Collection
     {
-        return $this->record->transactions()->whereType('refund')->whereSuccess(true)->get();
+        return $this->order->transactions()->whereType('refund')->whereSuccess(true)->get();
     }
 
     #[Computed]
@@ -222,4 +220,4 @@ class OrderItemsTable extends TableComponent
     {
         return $this->availableToRefund > 0;
     }
-}
+} 

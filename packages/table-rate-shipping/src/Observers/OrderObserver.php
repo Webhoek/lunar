@@ -10,16 +10,16 @@ class OrderObserver
 {
     public function updated(Order $order): void
     {
-        $this->updateShippingZone(
-            $order
-        );
+        // $this->updateShippingZone(
+        //     $order
+        // );
     }
 
     public function created(Order $order): void
     {
-        $this->updateShippingZone(
-            $order
-        );
+        // $this->updateShippingZone(
+        //     $order
+        // );
     }
 
     protected function updateShippingZone(Order $order): void
