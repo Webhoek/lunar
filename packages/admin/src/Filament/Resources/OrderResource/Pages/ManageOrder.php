@@ -79,11 +79,22 @@ class ManageOrder extends BaseViewRecord
             ->content(OrderResource\Pages\Components\OrderItemsTable::class);
     }
 
+    public static function getSupplierOrderTables(): array
+    {
+        return collect(self::getResource()::getModel()::with(['supplierOrders.supplier'])->find(request()->route('record'))?->supplierOrders ?? [])
+            ->map(function ($supplierOrder) {
+                return Livewire::make("supplier_order_{$supplierOrder->id}")
+                    ->content(OrderResource\Pages\Components\SupplierOrderItemsTable::class)
+                    ->mount($supplierOrder->order, $supplierOrder);
+            })
+            ->toArray();
+    }
+
     public static function getInfolistSchema(): array
     {
         return self::callStaticLunarHook('extendInfolistSchema', [
             static::getShippingInfolist(),
-            static::getOrderLinesTable(),
+            ...static::getSupplierOrderTables(),
             static::getOrderTotalsInfolist(),
             static::getTransactionsInfolist(),
             static::getTimelineInfolist(),

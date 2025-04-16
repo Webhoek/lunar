@@ -54,6 +54,14 @@ class ChannelRelationManager extends BaseRelationManager
                     __('lunarpanel::relationmanagers.channels.form.ends_at.helper_text')
                 ),
             ]),
+            Forms\Components\Grid::make('Publish Settings')->statePath('sync_settings')->schema(function ($record) {
+                // dd($record);
+                if (!$record || !$record->integration) {
+                    return [];
+                }
+
+                return $record->integration->handler_class::syncSchema();
+            }),
         ];
     }
 
@@ -132,7 +140,7 @@ class ChannelRelationManager extends BaseRelationManager
                                     ->openUrlInNewTab(),
                             ])
                             ->send();
-                    } catch (HttpClientException $e) {
+                    } catch (\Exception $e) {
                         Notification::make()
                             ->title('Publishing Failed')
                             ->danger()

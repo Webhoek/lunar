@@ -42,7 +42,9 @@ class Channel extends BaseModel implements Contracts\Channel
     public $casts = [
         'enabled' => 'boolean',
         'settings' => 'array',
+        'sync_default_settings' => 'array',
         'default' => 'boolean',
+        'sync_settings' => 'array',
     ];
 
     /**
@@ -148,6 +150,39 @@ class Channel extends BaseModel implements Contracts\Channel
         // }
 
         //throw new \Exception('Publisher not found.');
+    }
+
+    /**
+     * Get the columns that should be used for distinct operations.
+     *
+     * @return array
+     */
+    public function getDistinctColumns(): array
+    {
+        return array_diff(
+            $this->getFillable(),
+            ['sync_settings', 'settings', 'sync_default_settings']
+        );
+    }
+
+    /**
+     * Create a new Eloquent query builder for the model.
+     *
+     * @param  \Illuminate\Database\Query\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder|static
+     */
+    public function newEloquentBuilder($query)
+    {
+        return new class($query) extends \Illuminate\Database\Eloquent\Builder {
+            public function distinct()
+            {
+                $model = $this->getModel();
+                if (method_exists($model, 'getDistinctColumns')) {
+                    return $this->select($model->getDistinctColumns());
+                }
+                return parent::distinct();
+            }
+        };
     }
 
 }

@@ -23,6 +23,7 @@ trait HasChannels
                         'enabled' => $channel->default,
                         'starts_at' => $channel->default ? now() : null,
                         'ends_at' => null,
+                        'sync_default_settings' => $channel->sync_default_settings,
                     ],
                 ];
             });
@@ -38,7 +39,7 @@ trait HasChannels
      */
     public function channels()
     {
-        $prefix = config('lunar.database.table_prefix');
+        $prefix = config(key: 'lunar.database.table_prefix');
 
         return $this->morphToMany(
             Channel::class,
@@ -48,6 +49,7 @@ trait HasChannels
             'enabled',
             'starts_at',
             'ends_at',
+            'sync_settings',
         ])->withTimestamps();
     }
 
