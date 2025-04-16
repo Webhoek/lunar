@@ -35,6 +35,23 @@ use Lunar\Admin\Database\Factories\StaffFactory;
 use Lunar\Models\Supplier;
 use Spatie\Permission\Traits\HasRoles;
 
+/**
+ * @property int $id
+ * @property bool $admin
+ * @property string $first_name
+ * @property string $last_name
+ * @property string $full_name
+ * @property string $email
+ * @property string $password
+ * @property string $remember_token
+ * @property ?\Illuminate\Support\Carbon $email_verified_at
+ * @property ?\Illuminate\Support\Carbon $created_at
+ * @property ?\Illuminate\Support\Carbon $updated_at
+ * @property ?\Illuminate\Support\Carbon $deleted_at
+ *
+ * @method static \Illuminate\Database\Eloquent\Builder search(?string $terms)
+ */
+
 class Staff extends Authenticatable implements FilamentUser, HasName, MustVerifyEmail, HasTenants
 {
     use HasFactory;
@@ -45,6 +62,8 @@ class Staff extends Authenticatable implements FilamentUser, HasName, MustVerify
     protected $guard_name = 'staff';
 
     protected $fillable = [
+        'first_name',
+        'last_name',
         'first_name',
         'last_name',
         'admin',
