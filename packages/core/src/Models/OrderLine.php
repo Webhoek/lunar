@@ -75,6 +75,11 @@ class OrderLine extends BaseModel implements Contracts\OrderLine
         'total' => Price::class,
     ];
 
+    public function supplierOrder(): BelongsTo
+    {
+        return $this->belongsTo(SupplierOrder::class);
+    }
+
     public function order(): BelongsTo
     {
         return $this->belongsTo(Order::modelClass());
@@ -95,10 +100,5 @@ class OrderLine extends BaseModel implements Contracts\OrderLine
             'order_id',
             'currency_code'
         );
-    }
-
-    public function supplierOrder(): BelongsTo
-    {
-        return $this->belongsTo(SupplierOrder::class);
     }
 }
