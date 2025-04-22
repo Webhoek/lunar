@@ -6,7 +6,6 @@ use App\Models\Address;
 use App\Models\Order;
 use App\Models\RoadmapItem;
 use App\Models\Subscription;
-use App\Models\Supplier;
 use App\Models\SupplierUser;
 use App\Models\Tenant;
 use App\Models\TenantUser;
@@ -31,6 +30,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Collection;
 use Lunar\Admin\Database\Factories\StaffFactory;
+use Lunar\Models\Supplier;
 use Spatie\Permission\Traits\HasRoles;
 
 
