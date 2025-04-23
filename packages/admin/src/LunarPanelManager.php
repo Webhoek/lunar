@@ -254,6 +254,7 @@ class LunarPanelManager
                 ->name('lunar.pdf.download')->middleware($panelMiddleware);
         }
 
+
         return Panel::make()
             // ->spa()
             ->default()
@@ -332,6 +333,7 @@ class LunarPanelManager
             ->discoverLivewireComponents(__DIR__.'/Livewire', 'Lunar\\Admin\\Livewire')
             ->livewireComponents([
                 Resources\OrderResource\Pages\Components\OrderItemsTable::class,
+                Resources\OrderResource\Pages\Components\SupplierOrderItemsTable::class,
                 \Lunar\Admin\Filament\Resources\CollectionGroupResource\Widgets\CollectionTreeView::class,
             ])
             ->navigationGroups([

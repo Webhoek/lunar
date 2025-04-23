@@ -7,6 +7,7 @@ use Awcodes\Shout\Components\ShoutEntry;
 use Closure;
 use Filament\Actions;
 use Filament\Forms;
+use Filament\Forms\Components\Repeater;
 use Filament\Infolists;
 use Filament\Infolists\Components\Actions\Action;
 use Filament\Infolists\Components\TextEntry\TextEntrySize;
@@ -24,11 +25,14 @@ use Lunar\Admin\Support\Actions\PdfDownload;
 use Lunar\Admin\Support\ActivityLog\Concerns\CanDispatchActivityUpdated;
 use Lunar\Admin\Support\Concerns\CallsHooks;
 use Lunar\Admin\Support\Forms\Components\Tags as TagsComponent;
-use Lunar\Admin\Support\Infolists\Components\Livewire;
 use Lunar\Admin\Support\Infolists\Components\Tags;
 use Lunar\Admin\Support\Pages\BaseViewRecord;
 use Lunar\Models\Tag;
 use Lunar\Models\Transaction;
+use Filament\Forms\Components\Livewire;
+use Filament\Infolists\Components\RepeatableEntry;
+use Filament\Infolists\Components\TextEntry;
+use Lunar\Admin\Support\Infolists\Components\Livewire as ComponentsLivewire;
 
 /**
  * @property \Lunar\Models\Order $record
@@ -73,28 +77,28 @@ class ManageOrder extends BaseViewRecord
         return "{$label} #".$this->record->id;
     }
 
-    public static function getOrderLinesTable(): Livewire
+    public static function getOrderLinesTable(): ComponentsLivewire
     {
-        return Livewire::make('lines')
+        return ComponentsLivewire::make('lines')
             ->content(OrderResource\Pages\Components\OrderItemsTable::class);
     }
 
-    public static function getSupplierOrderTables(): array
+    public static function getSupplierOrderTables(): RepeatableEntry
     {
-        return collect(self::getResource()::getModel()::with(['supplierOrders.supplier'])->find(request()->route('record'))?->supplierOrders ?? [])
-            ->map(function ($supplierOrder) {
-                return Livewire::make("supplier_order_{$supplierOrder->id}")
-                    ->content(OrderResource\Pages\Components\SupplierOrderItemsTable::class)
-                    ->mount($supplierOrder->order, $supplierOrder);
-            })
-            ->toArray();
+        return RepeatableEntry::make('supplierOrders')
+        ->schema([
+            TextEntry::make('supplier.name'),
+            ComponentsLivewire::make('lines')->content(OrderResource\Pages\Components\SupplierOrderItemsTable::class)
+        ]);
     }
+    
 
     public static function getInfolistSchema(): array
     {
         return self::callStaticLunarHook('extendInfolistSchema', [
             static::getShippingInfolist(),
-            ...static::getSupplierOrderTables(),
+            //static::getOrderLinesTable(),
+            static::getSupplierOrderTables(),
             static::getOrderTotalsInfolist(),
             static::getTransactionsInfolist(),
             static::getTimelineInfolist(),

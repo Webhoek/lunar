@@ -119,9 +119,7 @@ class OrderItemsTable extends TableComponent
     public function getDefaultTable(Table $table): Table
     {
         return $table
-            ->query($this->record->lines()->getQuery()
-                ->wherein('type', ['physical', 'digital'])
-                ->with(['purchasable.supplier']))
+            ->query($this->record->lines()->getQuery())
             ->columns(static::getOrderLinesTableColumns())
             ->groups([
                 Tables\Grouping\Group::make('purchasable.supplier.name')
