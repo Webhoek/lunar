@@ -29,7 +29,8 @@ class SupplierOrder extends BaseModel
         return $this->belongsTo(Supplier::class);
     }
 
-    public function orderLines(): HasMany
+    
+    public function lines(): HasMany
     {
         return $this->hasMany(OrderLine::class);
     }
