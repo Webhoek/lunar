@@ -55,7 +55,7 @@ class Product extends BaseModel implements Contracts\Product, SpatieHasMedia
     //use HasUrls;
     use LogsActivity;
     //Commented out because of error -> algolia search
-    use Searchable;
+    //use Searchable;
     use SoftDeletes;
 
 
