@@ -33,7 +33,8 @@ class ProductOption extends BaseModel implements Contracts\ProductOption, Spatie
     use HasMacros;
     use HasMedia;
     use HasTranslations;
-    use Searchable;
+    //Commented out because of error -> algolia search
+    //use Searchable;
 
     /**
      * Define which attributes should be cast.
