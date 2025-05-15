@@ -2,6 +2,7 @@
 
 namespace Lunar\Admin\Filament\Resources\ProductVariantResource\Pages;
 
+use BrightNexo\SupplierProbo\Forms\Components\ProboComposedConfigurationField;
 use Cartalyst\Converter\Laravel\Facades\Converter;
 use Filament\Actions\Action;
 use Filament\Forms\Components\Section;

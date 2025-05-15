@@ -11,6 +11,7 @@ use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Lunar\Base\BaseModel;
+use App\Models\ChannelSupplier;
 
 class Supplier extends BaseModel implements HasMedia
 {
@@ -28,6 +29,7 @@ class Supplier extends BaseModel implements HasMedia
         'created_by',
         'settings',
         'import_handler',
+        'fulfillment_handler',
     ];
 
     protected $casts = [
@@ -53,6 +55,22 @@ class Supplier extends BaseModel implements HasMedia
         return $this->hasMany(SupplierProduct::class);
     }
 
+    /**
+     * Get the channels associated with the supplier.
+     */
+    public function channels()
+    {
+        $prefix = config('lunar.database.table_prefix');
+
+        return $this->belongsToMany(
+            Channel::class,
+            "{$prefix}channel_supplier"
+        )
+        ->withPivot(['integration_settings', 'enabled'])
+        ->using(ChannelSupplier::class)
+        ->withTimestamps();
+    }
+
     public function orders(): HasMany
     {
         return $this->hasMany(Order::class);
@@ -68,6 +86,8 @@ class Supplier extends BaseModel implements HasMedia
         $parsedUrl = parse_url($this->site_url);
         return $parsedUrl['host'] ?? '';
     }
+
+
 
     public function getApi(?array $settings = null)
     {
@@ -91,5 +111,20 @@ class Supplier extends BaseModel implements HasMedia
         }
 
         return $importer;
+    }
+
+    public function getFulfillmentHandler(): ?\Lunar\Contracts\FulfillmentHandler
+    {
+        if (!$this->fulfillment_handler || !class_exists($this->fulfillment_handler)) {
+            return null;
+        }
+
+        $handler = new $this->fulfillment_handler($this->settings ?? []);
+        
+        if (!($handler instanceof \Lunar\Contracts\FulfillmentHandler)) {
+            throw new \Exception("Fulfillment handler {$this->fulfillment_handler} must implement FulfillmentHandler interface");
+        }
+
+        return $handler;
     }
 }

@@ -113,6 +113,9 @@ return [
                     'price' => [
                         'label' => 'Price',
                     ],
+                    'cost-price' => [
+                        'label' => 'Cost Price',
+                    ],
                     'stock' => [
                         'label' => 'Stock',
                     ],

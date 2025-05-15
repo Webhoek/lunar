@@ -17,6 +17,7 @@ use Lunar\Base\Traits\HasDefaultRecord;
 use Lunar\Base\Traits\HasMacros;
 use Lunar\Base\Traits\LogsActivity;
 use Lunar\Database\Factories\ChannelFactory;
+use App\Models\ChannelSupplier;
 
 /**
  * @property int $id
@@ -44,7 +45,6 @@ class Channel extends BaseModel implements Contracts\Channel
         'settings' => 'array',
         'sync_default_settings' => 'array',
         'default' => 'boolean',
-        'sync_settings' => 'array',
     ];
 
     /**
@@ -134,6 +134,22 @@ class Channel extends BaseModel implements Contracts\Channel
         );
     }
 
+    /**
+     * Get the suppliers associated with the channel.
+     */
+    public function suppliers()
+    {
+        $prefix = config('lunar.database.table_prefix');
+
+        return $this->belongsToMany(
+            Supplier::class,
+            "{$prefix}channel_supplier"
+        )
+        ->withPivot(['integration_settings', 'enabled'])
+        ->using(ChannelSupplier::class)
+        ->withTimestamps();
+    }
+
     public function publisher()
     {
         return $this->getHandler();
@@ -161,7 +177,7 @@ class Channel extends BaseModel implements Contracts\Channel
     {
         return array_diff(
             $this->getFillable(),
-            ['sync_settings', 'settings', 'sync_default_settings']
+            ['sync_settings','settings', 'sync_default_settings']
         );
     }
 

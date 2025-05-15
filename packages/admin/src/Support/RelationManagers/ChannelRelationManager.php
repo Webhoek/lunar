@@ -55,12 +55,14 @@ class ChannelRelationManager extends BaseRelationManager
                 ),
             ]),
             Forms\Components\Grid::make('Publish Settings')->statePath('sync_settings')->schema(function ($record) {
-                // dd($record);
+
                 if (!$record || !$record->integration) {
                     return [];
                 }
 
                 return $record->integration->handler_class::syncSchema();
+            })->afterStateHydrated(function ($state) {
+             //  dd($state);
             }),
         ];
     }
@@ -145,7 +147,8 @@ class ChannelRelationManager extends BaseRelationManager
                             ->title('Publishing Failed')
                             ->danger()
                             ->icon('heroicon-o-x-circle')
-                            ->body('Could not publish to the shop. Please try again later.')
+                            //->body('Could not publish to the shop. Please try again later.')
+                            ->body($e->getMessage())
                             ->persistent()
                             ->send();
                         return;
