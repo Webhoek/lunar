@@ -20,6 +20,8 @@ use Filament\Models\Contracts\HasName;
 use Filament\Models\Contracts\HasTenants;
 use Filament\Panel;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -33,30 +35,18 @@ use Lunar\Admin\Database\Factories\StaffFactory;
 use Lunar\Models\Supplier;
 use Spatie\Permission\Traits\HasRoles;
 
-
-class Staff extends Authenticatable implements FilamentUser, HasName,  MustVerifyEmail, HasTenants
+class Staff extends Authenticatable implements FilamentUser, HasName, MustVerifyEmail, HasTenants
 {
     use HasFactory;
     use HasRoles;
     use Notifiable;
     use SoftDeletes;
 
-    /**
-     * Return a new factory instance for the model.
-     */
-    protected static function newFactory()
-    {
-        return StaffFactory::new();
-    }
+    protected $guard_name = 'staff';
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
     protected $fillable = [
-        'firstname',
-        'lastname',
+        'first_name',
+        'last_name',
         'admin',
         'email',
         'phone',
@@ -69,36 +59,13 @@ class Staff extends Authenticatable implements FilamentUser, HasName,  MustVerif
         'legacy_id',
     ];
 
-    protected $guard_name = 'staff';
-
-    protected $fillable = [
-        'first_name',
-        'last_name',
-        'admin',
-        'email',
-        'password',
-        'is_admin',
-        'public_name',
-        'is_blocked',
-    ];
-
-    protected $casts = [
-        'admin' => 'bool',
-        'email_verified_at' => 'datetime',
-        'password' => 'hashed',
-    ];
-
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
     protected $casts = [
+        'admin' => 'bool',
         'email_verified_at' => 'datetime',
         'last_activity_at' => 'datetime',
         'password' => 'hashed',
@@ -154,13 +121,11 @@ class Staff extends Authenticatable implements FilamentUser, HasName,  MustVerif
         }
     }
 
-
     public function getFilamentName(): string
     {
         return $this->full_name;
     }
 
-
     public function roadmapItems(): HasMany
     {
         return $this->hasMany(RoadmapItem::class);
@@ -195,89 +160,10 @@ class Staff extends Authenticatable implements FilamentUser, HasName,  MustVerif
     {
         return $this->hasMany(Transaction::class, 'user_id');
     }
-
 
     public function getPublicName()
     {
         return $this->public_name ?? $this->name;
-    }
-
-
-    public function roadmapItems(): HasMany
-    {
-        return $this->hasMany(RoadmapItem::class);
-    }
-
-    public function roadmapItemUpvotes(): BelongsToMany
-    {
-        return $this->belongsToMany(RoadmapItem::class, 'roadmap_item_user_upvotes');
-    }
-
-    public function userParameters(): HasMany
-    {
-        return $this->hasMany(UserParameter::class);
-    }
-
-    public function stripeData(): HasMany
-    {
-        return $this->hasMany(UserStripeData::class);
-    }
-
-    public function subscriptions(): HasMany
-    {
-        return $this->hasMany(Subscription::class, 'user_id');
-    }
-
-    public function orders(): HasMany
-    {
-        return $this->hasMany(Order::class, 'user_id');
-    }
-
-    public function transactions(): HasMany
-    {
-        return $this->hasMany(Transaction::class, 'user_id');
-    }
-
-
-    public function getPublicName()
-    {
-        return $this->public_name ?? $this->name;
-    }
-
-
-    public function roadmapItems(): HasMany
-    {
-        return $this->hasMany(RoadmapItem::class);
-    }
-
-    public function roadmapItemUpvotes(): BelongsToMany
-    {
-        return $this->belongsToMany(RoadmapItem::class, 'roadmap_item_user_upvotes');
-    }
-
-    public function userParameters(): HasMany
-    {
-        return $this->hasMany(UserParameter::class);
-    }
-
-    public function stripeData(): HasMany
-    {
-        return $this->hasMany(UserStripeData::class);
-    }
-
-    public function subscriptions(): HasMany
-    {
-        return $this->hasMany(Subscription::class, 'user_id');
-    }
-
-    public function orders(): HasMany
-    {
-        return $this->hasMany(Order::class, 'user_id');
-    }
-
-    public function transactions(): HasMany
-    {
-        return $this->hasMany(Transaction::class, 'user_id');
     }
 
     public function canAccessPanel(Panel $panel): bool
@@ -287,11 +173,6 @@ class Staff extends Authenticatable implements FilamentUser, HasName,  MustVerif
         }
 
         return true;
-    }
-
-    public function getPublicName()
-    {
-        return $this->public_name ?? $this->name;
     }
 
     public function scopeAdmin($query)
@@ -347,9 +228,9 @@ class Staff extends Authenticatable implements FilamentUser, HasName,  MustVerif
     {
         return $this->belongsToMany(
             Tenant::class,
-            'tenant_user', // Specify the pivot table
-            'user_id',     // Foreign key on the pivot table for the user
-            'tenant_id'    // Foreign key on the pivot table for the tenant
+            'tenant_user',
+            'user_id',
+            'tenant_id'
         )->using(TenantUser::class)->withPivot('id')->withTimestamps();
     }
 
@@ -360,9 +241,8 @@ class Staff extends Authenticatable implements FilamentUser, HasName,  MustVerif
 
     public function canAccessTenant(Model $tenant): bool
     {
-        if($tenant instanceof Supplier){
+        if ($tenant instanceof Supplier) {
             return $this->suppliers()->whereKey($tenant)->exists();
-
         }
 
         return $this->tenants()->whereKey($tenant)->exists();
@@ -372,10 +252,9 @@ class Staff extends Authenticatable implements FilamentUser, HasName,  MustVerif
     {
         return $this->belongsToMany(
             Supplier::class,
-            'supplier_user', // Specify the pivot table
-            'user_id',     // Foreign key on the pivot table for the user
-            'supplier_id'    // Foreign key on the pivot table for the tenant
+            'supplier_user',
+            'user_id',
+            'supplier_id'
         )->using(SupplierUser::class)->withPivot('id')->withTimestamps();
     }
-
 }
