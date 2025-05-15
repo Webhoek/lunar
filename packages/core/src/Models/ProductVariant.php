@@ -2,9 +2,11 @@
 
 namespace Lunar\Models;
 
+use App\Models\Configurator;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Collection;
 use Lunar\Base\BaseModel;
@@ -75,6 +77,7 @@ class ProductVariant extends BaseModel implements Contracts\ProductVariant, Purc
     protected $casts = [
         'requires_shipping' => 'bool',
         'attribute_data' => AsAttributeData::class,
+        'fulfillment_data' => 'json',
     ];
 
     /**
@@ -105,6 +108,16 @@ class ProductVariant extends BaseModel implements Contracts\ProductVariant, Purc
             'variant_id',
             'value_id'
         )->withTimestamps();
+    }
+
+    public function configurator(): HasOne
+    {
+        return $this->hasOne(Configurator::class, 'product_variant_id');
+    }
+
+    public function supplier(): BelongsTo
+    {
+        return $this->belongsTo(Supplier::class);
     }
 
     public function getPrices(): Collection

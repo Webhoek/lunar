@@ -53,6 +53,7 @@ class ProductVariantResource extends BaseResource
             Pages\ManageVariantIdentifiers::class,
             Pages\ManageVariantInventory::class,
             Pages\ManageVariantShipping::class,
+            Pages\ManageVariantFulfillment::class,
         ];
     }
 
@@ -84,6 +85,7 @@ class ProductVariantResource extends BaseResource
     {
         return [
             static::getSkuFormComponent(),
+            static::getSupplierFormComponent(),
         ];
     }
 
@@ -336,6 +338,16 @@ class ProductVariantResource extends BaseResource
             'identifiers' => Pages\ManageVariantIdentifiers::route('/{record}/identifiers'),
             'inventory' => Pages\ManageVariantInventory::route('/{record}/inventory'),
             'shipping' => Pages\ManageVariantShipping::route('/{record}/shipping'),
+            'fulfillment' => Pages\ManageVariantFulfillment::route('/{record}/fulfillment'),
         ];
+    }
+
+    public static function getSupplierFormComponent(): Forms\Components\Select
+    {
+        return Forms\Components\Select::make('supplier_id')
+            ->relationship('supplier', 'name')
+            ->label(__('lunarpanel::productvariant.form.supplier.label'))
+            ->searchable()
+            ->preload();
     }
 }

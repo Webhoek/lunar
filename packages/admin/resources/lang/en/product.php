@@ -123,6 +123,21 @@ return [
         'associations' => [
             'label' => 'Product Associations',
         ],
+        'fulfillment' => [
+            'title' => 'Fulfillment',
+            'form' => [
+                'supplier' => [
+                    'label' => 'Supplier',
+                    'placeholder' => 'Select a supplier',
+                    'helper_text' => 'Select a supplier to manage fulfillment settings',
+                    'selected' => 'You\'ve selected :name as the supplier',
+                    'loading' => 'Loading suppliers...',
+                    'search_prompt' => 'Search suppliers...',
+                    'no_results' => 'No suppliers found.',
+                    'searching' => 'Searching...',
+                ],
+            ],
+        ],
     ],
 
 ];

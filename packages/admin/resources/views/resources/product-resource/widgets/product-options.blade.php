@@ -98,9 +98,14 @@
                     </x-filament-tables::header-cell>
                     <x-filament-tables::header-cell>
                       <span class="fi-ta-header-cell-label text-sm font-semibold text-gray-950 dark:text-white">
-                        {{ __('lunarpanel::productoption.widgets.product-options.variants-table.table.stock.label') }}
+                        {{ __('lunarpanel::productoption.widgets.product-options.variants-table.table.cost-price.label') }}
                       </span>
                     </x-filament-tables::header-cell>
+                    {{-- <x-filament-tables::header-cell>
+                      <span class="fi-ta-header-cell-label text-sm font-semibold text-gray-950 dark:text-white">
+                        {{ __('lunarpanel::productoption.widgets.product-options.variants-table.table.stock.label') }}
+                      </span>
+                    </x-filament-tables::header-cell> --}}
                     <x-filament-tables::header-cell>
                     </x-filament-tables::header-cell>
                   </tr>
@@ -154,11 +159,21 @@
                         <x-filament::input.wrapper>
                           <x-filament::input
                                   type="text"
-                                  wire:model="variants.{{ $permutationIndex }}.stock"
+                                  wire:model="variants.{{ $permutationIndex }}.cost_price"
                           />
                         </x-filament::input.wrapper>
                       </div>
                     </x-filament-tables::cell>
+                    {{-- <x-filament-tables::cell class="w-32">
+                      <div class="fi-ta-text grid w-full gap-y-1 px-3 py-4">
+                        <x-filament::input.wrapper>
+                          <x-filament::input
+                                  type="text"
+                                  wire:model="variants.{{ $permutationIndex }}.stock"
+                          />
+                        </x-filament::input.wrapper>
+                      </div>
+                    </x-filament-tables::cell> --}}
                     <x-filament-tables::cell>
                       <div class="flex items-center space-x-2">
                         @if($permutation['variant_id'])

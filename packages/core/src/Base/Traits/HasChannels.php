@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Support\Collection;
 use Lunar\Facades\DB;
 use Lunar\Models\Channel;
+use App\Models\Channelable;
 
 trait HasChannels
 {
@@ -44,7 +45,8 @@ trait HasChannels
             Channel::class,
             'channelable',
             "{$prefix}channelables",
-        )->withPivot([
+        )->using(Channelable::class)
+        ->withPivot([
             'enabled',
             'starts_at',
             'ends_at',

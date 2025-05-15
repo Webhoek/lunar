@@ -113,6 +113,9 @@ return [
                     'price' => [
                         'label' => 'Cena',
                     ],
+                    'cost-price' => [
+                        'label' => 'Cena zakupu',
+                    ],
                     'stock' => [
                         'label' => 'Stan magazynowy',
                     ],

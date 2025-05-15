@@ -113,6 +113,9 @@ return [
                     'price' => [
                         'label' => 'Prijs',
                     ],
+                    'cost-price' => [
+                        'label' => 'Kostprijs',
+                    ],
                     'stock' => [
                         'label' => 'Voorraad',
                     ],

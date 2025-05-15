@@ -13,6 +13,8 @@ use Filament\Support\Facades\FilamentIcon;
 use Filament\Tables;
 use Filament\Tables\Columns\SpatieMediaLibraryImageColumn;
 use Filament\Tables\Table;
+use Illuminate\Support\HtmlString;
+
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -37,6 +39,7 @@ use Lunar\Models\Contracts\Product;
 use Lunar\Models\Currency;
 use Lunar\Models\ProductVariant;
 use Lunar\Models\Tag;
+use App\Filament\Admin\Resources\ProductResource\Pages\ManageProductFulfillment;
 
 class ProductResource extends BaseResource
 {
@@ -81,6 +84,7 @@ class ProductResource extends BaseResource
             Pages\ManageProductIdentifiers::class,
             Pages\ManageProductInventory::class,
             Pages\ManageProductShipping::class,
+            Pages\ManageProductFulfillment::class,
             Pages\ManageProductVariants::class,
             //Pages\ManageProductUrls::class,
             Pages\ManageProductCollections::class,
@@ -284,15 +288,7 @@ class ProductResource extends BaseResource
             //     ->label(__('lunarpanel::product.table.brand.label'))
             //     ->toggleable()
             //     ->searchable(),
-            Tables\Columns\TextColumn::make('supplier.name')
-                ->label(__('lunarpanel::product.table.supplier.label'))
-                ->toggleable()
-                ->weight(FontWeight::Bold)
-                ->searchable()
-                ->prefix(fn ($record) => $record->supplier?->getFirstMedia('favicons')
-                        ? new \Illuminate\Support\HtmlString('<img src="'.$record->supplier->getFirstMedia('favicons')->getUrl().'" style="width: 16px; height: 16px; margin-right: 4px; display: inline-block; vertical-align: middle;">')
-                        : ''
-                ),
+            static::getSupplierTableColumn(),
             static::getSkuTableColumn(),
             Tables\Columns\TextColumn::make('variants_sum_stock')
                 ->label(__('lunarpanel::product.table.stock.label'))
@@ -322,6 +318,36 @@ class ProductResource extends BaseResource
             ->limit(50)
             ->sortable()
             ->label(__('lunarpanel::product.table.name.label'))
+            ->searchable();
+    }
+
+
+    public static function getSupplierTableColumn(): Tables\Columns\Column
+    {
+        return Tables\Columns\TextColumn::make('suppliers.name')
+            // ->state (function (Tables\Columns\TextColumn $column, Model $record): string {
+            //     return $record->variants->first()->supplier?->name ?? '';
+            // })
+            ->label(__('lunarpanel::product.table.supplier.label'))
+            ->tooltip(function (Tables\Columns\TextColumn $column, Model $record): ?string {
+
+                if ($record->suppliers->count() <= $column->getListLimit()) {
+                    return null;
+                }
+
+                if ($record->suppliers->count() > 30) {
+                    $record->suppliers = $record->suppliers->slice(0, 30);
+                }
+
+                return $record->suppliers
+                    ->map(fn ($supplier) => $supplier?->name)
+                    ->filter()
+                    ->unique()
+                    ->implode(', ');
+            })
+            ->listWithLineBreaks()
+            ->limitList(1)
+            ->toggleable()
             ->searchable();
     }
 
@@ -374,6 +400,7 @@ class ProductResource extends BaseResource
             'pricing' => Pages\ManageProductPricing::route('/{record}/pricing'),
             'inventory' => Pages\ManageProductInventory::route('/{record}/inventory'),
             'shipping' => Pages\ManageProductShipping::route('/{record}/shipping'),
+            'fulfillment' => Pages\ManageProductFulfillment::route('/{record}/fulfillment'),
             'variants' => Pages\ManageProductVariants::route('/{record}/variants'),
             'urls' => Pages\ManageProductUrls::route('/{record}/urls'),
             'collections' => Pages\ManageProductCollections::route('/{record}/collections'),

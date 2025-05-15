@@ -32,7 +32,8 @@ if (! function_exists('sync_with_search')) {
         }
 
         if ($model instanceof \Lunar\Models\ProductVariant) {
-            $model->product()->first()->searchable();
+            // @TODO: Add searchability to product variant beaudinn           
+            // $model->product()->first()->searchable();
         }
 
         if ($model instanceof \Lunar\Models\Address) {

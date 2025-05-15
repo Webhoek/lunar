@@ -160,6 +160,7 @@ class LunarPanelManager
             'lunar::product-options' => 'lucide-list',
             'lunar::product-shipping' => 'lucide-truck',
             'lunar::product-variants' => 'lucide-shapes',
+            'lunar::product-fulfillment' => 'lucide-store', //lucide-workflow
             'lunar::products' => 'lucide-tag',
             'lunar::staff' => 'lucide-shield',
             'lunar::tags' => 'lucide-tags',

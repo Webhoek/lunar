@@ -199,6 +199,21 @@ class Product extends BaseModel implements Contracts\Product, SpatieHasMedia
         return $this->belongsTo(Supplier::class);
     }
 
+    /**
+     * Get unique suppliers through variants
+     */
+    public function suppliers(): BelongsToMany
+    {
+        $prefix = config('lunar.database.table_prefix');
+        
+        return $this->belongsToMany(
+            Supplier::class,
+            "{$prefix}product_variants",
+            'product_id',
+            'supplier_id'
+        )->distinct();
+    }
+
     public function scopeStatus(Builder $query, string $status): Builder
     {
         return $query->whereStatus($status);

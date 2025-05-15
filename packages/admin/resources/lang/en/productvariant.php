@@ -31,6 +31,21 @@ return [
         'shipping' => [
             'title' => 'Shipping',
         ],
+        'fulfillment' => [
+            'title' => 'Fulfillment',
+            'form' => [
+                'supplier' => [
+                    'label' => 'Select Supplier',
+                    'helper_text' => 'Select the supplier for this variant',
+                    'placeholder' => 'Choose a supplier',
+                    'loading' => 'Loading suppliers...',
+                    'search_prompt' => 'Search suppliers by name',
+                    'no_results' => 'No suppliers found.',
+                    'searching' => 'Searching suppliers...',
+                    'selected' => 'Selected supplier: :name',
+                ],
+            ],
+        ],
     ],
     'form' => [
         'sku' => [

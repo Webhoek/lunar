@@ -11,6 +11,7 @@ return new class extends Migration
         Schema::create($this->prefix.'supplier_product_variants', function (Blueprint $table) {
             $table->id();
             $table->foreignId('supplier_product_id')->constrained($this->prefix.'supplier_products');
+            $table->foreignId('supplier_id')->nullable()->constrained($this->prefix.'suppliers');
             $table->foreignId('tax_class_id')->constrained($this->prefix.'tax_classes');
             $table->string('tax_ref')->index()->nullable();
             $table->integer('unit_quantity')->unsigned()->index()->default(1);

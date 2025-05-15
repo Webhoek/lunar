@@ -30,7 +30,7 @@ class ManageProductVariants extends BaseManageRelatedRecords
 
     public static function shouldRegisterNavigation(array $parameters = []): bool
     {
-        return config('lunar.panel.enable_variants', true);
+        return config('lunar.panel.enable_variants', true) && $parameters['record']->type !== 'probo-dynamic';
     }
 
     public static function canAccess(array $parameters = []): bool
