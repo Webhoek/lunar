@@ -124,7 +124,12 @@ class Staff extends Authenticatable implements FilamentUser, HasName, MustVerify
         }
     }
 
-    protected static function newFactory(): StaffFactory
+    /**
+     * Create a new factory instance for the model.
+     *
+     * @return \Lunar\Admin\Database\Factories\StaffFactory
+     */
+    protected static function newFactory()
     {
         return StaffFactory::new();
     }

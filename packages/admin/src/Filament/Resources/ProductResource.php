@@ -40,11 +40,12 @@ use Lunar\Models\Currency;
 use Lunar\Models\ProductVariant;
 use Lunar\Models\Tag;
 use App\Filament\Admin\Resources\ProductResource\Pages\ManageProductFulfillment;
+use Lunar\Models\Product as ModelsProduct;
 
 class ProductResource extends BaseResource
 {
 
-    protected static ?string $model = Product::class;
+    protected static ?string $model = ModelsProduct::class;
     protected static bool $isScopedToTenant = false;
     protected static ?string $recordTitleAttribute = 'recordTitle';
 
