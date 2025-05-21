@@ -22,7 +22,7 @@ class PopulateProductOptionLabelWithName
         DB::transaction(function () {
             ProductOption::whereNull('label')
                 ->update([
-                    'label' => DB::raw('name'),
+                    'label' => DB::raw("to_jsonb(name)"),
                 ]);
         });
     }

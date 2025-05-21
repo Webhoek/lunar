@@ -255,6 +255,8 @@ class LunarPanelManager
                 ->name('lunar.pdf.download')->middleware($panelMiddleware);
         }
 
+    
+
 
         return Panel::make()
             // ->spa()
@@ -271,6 +273,9 @@ class LunarPanelManager
             ->login()
             ->tenantMenu()
             ->tenant(Tenant::class, 'uuid')
+            ->tenantMiddleware([
+                \App\Http\Middleware\RedirectLegacyTenants::class,
+            ], isPersistent: true)
             ->colors([
                 'primary' => Color::Sky,
             ])
