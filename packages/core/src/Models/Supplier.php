@@ -12,6 +12,8 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Lunar\Base\BaseModel;
 use App\Models\ChannelSupplier;
+use App\Models\SupplierUser;
+use App\Models\User;
 
 class Supplier extends BaseModel implements HasMedia
 {

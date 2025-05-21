@@ -65,8 +65,6 @@ class Staff extends Authenticatable implements FilamentUser, HasName, MustVerify
     protected $fillable = [
         'first_name',
         'last_name',
-        'first_name',
-        'last_name',
         'admin',
         'email',
         'phone',
