@@ -32,6 +32,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Collection;
+use Laragear\TwoFactor\Contracts\TwoFactorAuthenticatable;
+use Laragear\TwoFactor\TwoFactorAuthentication;
 use Lunar\Admin\Database\Factories\StaffFactory;
 use Lunar\Models\Supplier;
 use Spatie\Permission\Traits\HasRoles;
@@ -53,12 +55,13 @@ use Spatie\Permission\Traits\HasRoles;
  * @method static \Illuminate\Database\Eloquent\Builder search(?string $terms)
  */
 
-class Staff extends Authenticatable implements FilamentUser, HasName, MustVerifyEmail, HasTenants
+class Staff extends Authenticatable implements FilamentUser, HasName, MustVerifyEmail, HasTenants, TwoFactorAuthenticatable
 {
     use HasFactory;
     use HasRoles;
     use Notifiable;
     use SoftDeletes;
+    use TwoFactorAuthentication;
 
     protected $guard_name = 'staff';
 
