@@ -115,6 +115,13 @@ class Staff extends Authenticatable implements FilamentUser, HasName, MustVerify
         );
     }
 
+    public function name(): Attribute
+    {
+        return Attribute::get(
+            fn (): string => "{$this->first_name} {$this->last_name}",
+        );
+    }
+
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
