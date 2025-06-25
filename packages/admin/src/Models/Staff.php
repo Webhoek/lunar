@@ -171,12 +171,12 @@ class Staff extends Authenticatable implements FilamentUser, HasName, MustVerify
 
     public function userParameters(): HasMany
     {
-        return $this->hasMany(UserParameter::class);
+        return $this->hasMany(UserParameter::class, 'user_id');
     }
 
     public function stripeData(): HasMany
     {
-        return $this->hasMany(UserStripeData::class);
+        return $this->hasMany(UserStripeData::class, 'user_id');
     }
 
     public function subscriptions(): HasMany
