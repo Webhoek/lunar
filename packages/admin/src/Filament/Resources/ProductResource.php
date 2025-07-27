@@ -417,7 +417,7 @@ class ProductResource extends BaseResource
     {
         return [
             'variants.sku',
-            'tags.value',
+            // 'tags.value',
         ];
     }
 
@@ -434,7 +434,7 @@ class ProductResource extends BaseResource
         return parent::getGlobalSearchEloquentQuery()->with([
             'variants',
             // 'brand',
-            'tags',
+            // 'tags',
         ]);
     }
 
